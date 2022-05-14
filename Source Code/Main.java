@@ -39,6 +39,17 @@ public class Main{
         }
     }
 
+    //Function to promt user for Filename and returns it as a string
+    public String static readFileName(){
+        System.out.printl("Please Enter Name of File in the same directory as jar file or enter directoty to filename, with the filename.");
+        System.out.print("Enter The Name of The File: ");
+
+        Scanner read = new Scanner(System.in);
+        String filename = read.nextLine();
+
+        read.close();
+        return filename;
+    }
     public static void main(String[] args) {
 
     }
