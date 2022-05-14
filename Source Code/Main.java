@@ -69,5 +69,11 @@ public class Main{
         /*for(String line : fileContent){
             System.out.println(line.length());
         }*/
+
+        //Make Lexer and perform Lexical Analysis
+        Lexer lexer = new lexer(fileContent, fileSize);
+        lexer.lexicalAnalysis();
+
     }
+
 }
