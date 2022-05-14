@@ -56,6 +56,13 @@ public class Main{
     public static void main(String[] args) {
         String fileName = readFileName();
         int fileSize = readFileSize(fileName);
+
+        //Error message if file is not found.
+        if(fileSize == -1){
+            System.out.println("ERROR: File not found. Please Make sure the FILE is in THE SAME directory as the excutable.");
+            return;
+        }
+
         String[] fileContent = readFile(fileName, fileSize);
 
         //Test Code to make Sure read in line correctly: Passed Test Reads in line properly
