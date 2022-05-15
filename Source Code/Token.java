@@ -1,10 +1,12 @@
 public class Token{
     String id;                    //position of the token in the stream
     String _class;                 //token type
-    String contents;              //actual instance of the token type
+    String content;              //actual instance of the token type
 
-    public Token(){
-
+    public Token(int id, String _class, String content){
+        this.id=Integer.toString(id);
+        this._class=_class;
+        this.content=content;
     }
 
     //setter for Token ID
@@ -13,13 +15,13 @@ public class Token{
     }
 
     //setter for Token Class
-    public void setClass(String c){
+    public void set_Class(String c){
         _class = c;
     }
 
     //gsetter for Token Contents
-    public void setContents(String content){
-        contents = content;
+    public void setContent(String content){
+        this.content = content;
     }
 
     //getter for Token ID
@@ -28,12 +30,12 @@ public class Token{
     }
 
     //getter for Token Class
-    public String getClass(){
+    public String get_Class(){
         return _class;
     }
 
     //getter for Token Contents
-    public String getContents(){
-        return contents;
+    public String getContent(){
+        return content;
     }
 }

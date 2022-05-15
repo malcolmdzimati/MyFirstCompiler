@@ -71,9 +71,9 @@ public class Main{
         }*/
 
         //Make Lexer and perform Lexical Analysis
-        Lexer lexer = new lexer(fileContent, fileSize);
-        lexer.lexicalAnalysis();
-
+        Lexer lexer = new Lexer(fileContent, fileSize);
+        lexer.tokenize();
+        lexer.printToken();
     }
 
 }

@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Automata {
 
-    private enum State{
+    /*private enum State{
         //Defines Different states and defines them as accepting or not:
         S1(false), S2(true), S3(true), S4(true), S5(false), S6(false), S7(false), S8(false), S9(false), S10(false), S11(false), S12(false), S13(false), S14(false), S15(false), S16(false), S17(false), S18(false), S19(false), S20(false), S21(true), S22(true), S23(false), S24(false);
 
@@ -30,7 +30,7 @@ public class Automata {
 
         static{
             //Defines all Transition States:
-            S1.colon=s2; S1.symbols=S3; S1.smallCap=S4; S1.quotation=S5, S1.nNumbers=S21; S1.negative=S23;          //Transitions From S1
+            /**S1.colon=s2; S1.symbols=S3; S1.smallCap=S4; S1.quotation=S5, S1.nNumbers=S21; S1.negative=S23;          //Transitions From S1
             S2.assignment=S3;                                                                                       //Transitions from S2
             S3;                                                                                                     //Transitions from S3
             S4.smallCap=S4; S4.wNumber=S4;                                                                          //Transitions from S4
@@ -52,13 +52,13 @@ public class Automata {
             S20.quotation=S21;                                                                                      //Transitions from s20
             S21.wNumbers=S21;                                                                                       //Transitions from S21
             S22;                                                                                                    //Transitions from S22
-            S23.nNumbers=S21;                                                                                       //Transitions frm S23
+            S23.nNumbers=S21;                                                                                 //Transitions frm S23
         }
 
         //Defines a single transition from a state to another state
         State transition(char ch){
             char colon=':';
-            char quotation='\';
+           // char quotation='\';
             char space=' ';
             char eq='=';
             char negative='-';
@@ -68,5 +68,5 @@ public class Automata {
             String wNumbers="0987654321";
             String nNumbers="123456789";
 
-    }
+    }*/
 }
