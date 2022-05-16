@@ -3,7 +3,7 @@ import java.util.Arrays;
 import java.util.List;
 
 interface State {
-    public State next(Token word);
+    public State next(Token word, int i);
     String colon=":";
     String symbols="0{}()[],;";
     String smallAlpha="abcdefghijklmnopqrstuvwxyz";
@@ -23,7 +23,7 @@ interface FinalState extends State {
 enum AcceptingState implements FinalState {
     Accept {
         @Override
-        public State next(Token word) {
+        public State next(Token word, int i) {
             return Accept;
         }
     };
@@ -32,7 +32,7 @@ enum AcceptingState implements FinalState {
 enum FailingState implements FinalState {
     Fail {
         @Override
-        public State next(Token word) {
+        public State next(Token word, int i) {
             return Fail;
         }
     };
@@ -41,21 +41,29 @@ enum FailingState implements FinalState {
 enum States implements State {
     A {
         @Override
-        public State next(Token word) {
+        public State next(Token word, int i) {
             if (word.hasNext()) {
-                char c = word.read();
-
-                if(colon.indexOf(c)!=-1){
+                if(colon.indexOf(word.read(i))!=-1){
                     return B;
-                }else if(symbols.indexOf(c)!=-1){
+                }
+
+                if(symbols.indexOf(word.read(i))!=-1){
                     return C;
-                }else if(smallAlpha.indexOf(c)!=-1){
+                }
+
+                if(smallAlpha.indexOf(word.read(i))!=-1){
                     return D;
-                }else if(quotation.indexOf(c)!=-1){
+                }
+
+                if(quotation.indexOf(word.read(i))!=-1){
                     return E;
-                }else if(naturalNumbers.indexOf(c)!=-1){
+                }
+
+                if(naturalNumbers.indexOf(word.read(i))!=-1){
                     return F;
-                }else if(negative.indexOf(c)!=-1){
+                }
+
+                if(negative.indexOf(word.read(i))!=-1){
                     return G;
                 }
             }
@@ -65,9 +73,9 @@ enum States implements State {
 
     B {
         @Override
-        public State next(Token word) {
+        public State next(Token word, int i) {
             if (word.hasNext()) {
-                if(assignment.indexOf(word.read())!=-1){
+                if(assignment.indexOf(word.read(i))!=-1){
                     return C;
                 }
             }
@@ -77,20 +85,20 @@ enum States implements State {
 
     C {
         @Override
-        public State next(Token word) {
+        public State next(Token word, int i) {
             return AcceptingState.Accept;
         }
     },
 
     D {
         @Override
-        public State next(Token word) {
+        public State next(Token word, int i) {
             if(word.hasNext()){
-                char c = word.read();
-
-                if(smallAlpha.indexOf(c)!=-1){
+                if(smallAlpha.indexOf(word.read(i))!=-1){
                     return D;
-                }else if(wholeNumbers.indexOf(c)!=-1){
+                }
+
+                if(wholeNumbers.indexOf(word.read(i))!=-1){
                     return D;
                 }
             }
@@ -100,17 +108,21 @@ enum States implements State {
 
     E {
         @Override
-        public State next(Token word) {
+        public State next(Token word, int i) {
             if(word.hasNext()){
-                char c = word.read();
+                if(wholeNumbers.indexOf(word.read(i))!=-1){
+                    return E;
+                }
 
-                if(wholeNumbers.indexOf(c)!=-1){
+                if(bigAlpha.indexOf(word.read(i))!=-1){
                     return E;
-                }else if(bigAlpha.indexOf(c)!=-1){
+                }
+
+                if(blank.indexOf(word.read(i))!=-1){
                     return E;
-                }else if(blank.indexOf(c)!=-1){
-                    return E;
-                }else if(quotation.indexOf(c)!=-1){
+                }
+
+                if(quotation.indexOf(word.read(i))!=-1){
                     return C;
                 }
             }
@@ -120,9 +132,9 @@ enum States implements State {
 
     F {
         @Override
-        public State next(Token word) {
+        public State next(Token word, int i) {
             if(word.hasNext()){
-                if(wholeNumbers.indexOf(word.read())!=-1){
+                if(wholeNumbers.indexOf(word.read(i))!=-1){
                     return F;
                 }
             }
@@ -132,9 +144,9 @@ enum States implements State {
 
     G {
         @Override
-        public State next(Token word) {
+        public State next(Token word, int i) {
             if(word.hasNext()){
-                if(naturalNumbers.indexOf(word.read())!=-1){
+                if(naturalNumbers.indexOf(word.read(i))!=-1){
                     return F;
                 }
             }
@@ -142,16 +154,17 @@ enum States implements State {
         }
     };
 
-    public abstract State next(Token word);
+    public abstract State next(Token word, int i);
 }
 
 public class Automata {
-    public boolean check(Token token){
+    public void check(Token token){
         State s;
 
-        for(s=States.A; !(s instanceof FinalState); s = s.next(token)){
-
+        int i=0;
+        for(s=States.A; !(s instanceof FinalState); s = s.next(token, i)){
+            i++;
         }
-        return s.toString() == "Accept";
+        System.out.println(s);
     }
 }

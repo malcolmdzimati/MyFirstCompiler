@@ -5,6 +5,7 @@ public class Lexer{
     int codeSize;
     Token[] tokens = new Token[1000];
     int tokenLen=0;
+    Automata DFA = new Automata();
 
     public Lexer(String[] code, int size){
         this.code = code;
@@ -13,12 +14,25 @@ public class Lexer{
 
     public void printToken(){
         for(int i=0; i<tokenLen; i++){
-            System.out.println(tokens[i].get_Class()+": "+tokens[i].getContent());
+            if (DFA.check(tokens[i])){
+                System.out.println("Accept");
+            }else{
+                System.out.println("Reject");
+            }
+
+            System.out.println("\t"+tokens[i].get_Class()+": "+tokens[i].getContent()+"\n");
         }
     }
 
+    public void LexicalAnalysis(){
+        for(int i=0; i<tokenLen; i++){
+            DFA.check(tokens[i]);
+        }
+    }
+
+
     public void tokenize(){
-        String ml = ":{}[],;-()";
+        String ml = ":{}[],;()";
         String qm = "\"";
         int numToken=0;
 
@@ -89,5 +103,8 @@ public class Lexer{
             }
         }
         tokenLen = numToken;
+    }
+
+    public void lexicalAnalysis(){
     }
 }

@@ -5,9 +5,6 @@ aa
 
                     input
     main
-        prroc
+        proc
             -1034543534
 num
-0
-main{""proc      "ASFV"      56245  56.2  I; := =
-
