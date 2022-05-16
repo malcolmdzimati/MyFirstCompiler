@@ -5,9 +5,9 @@ public class Token{
     int current;
 
     public Token(int id, String _class, String content){
-        this.id=Integer.toString(id);
-        this._class=_class;
-        this.content=content;
+        this._class = _class;
+        this.id = Integer.toString(id);
+        this.content = content;
         current=0;
     }
 
