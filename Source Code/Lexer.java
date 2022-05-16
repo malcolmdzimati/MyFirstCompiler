@@ -51,7 +51,7 @@ public class Lexer{
                     tk+=ct;
                     if(qm.indexOf(ct)!=-1){
                         nBetweenB=false;
-                        if(tk.length()>15){
+                        if(tk.length()>17){
                             //Throw Error
                         }else{
                             tokens[numToken] = new Token(numToken, "ShortString", tk);

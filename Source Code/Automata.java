@@ -50,12 +50,15 @@ enum States implements State {
                 }else if(symbols.indexOf(c)!=-1){
                     return C;
                 }else if(smallAlpha.indexOf(c)!=-1){
+                    //word.set_Class("userDefinedNames");
                     return D;
                 }else if(quotation.indexOf(c)!=-1){
                     return E;
                 }else if(naturalNumbers.indexOf(c)!=-1){
+                    word.set_Class("Number");
                     return F;
                 }else if(negative.indexOf(c)!=-1){
+                    word.set_Class("Number");
                     return G;
                 }
             }
@@ -92,6 +95,8 @@ enum States implements State {
                     return D;
                 }else if(wholeNumbers.indexOf(c)!=-1){
                     return D;
+                }else{
+                    return FailingState.Fail;
                 }
             }
             return AcceptingState.Accept;
@@ -124,6 +129,8 @@ enum States implements State {
             if(word.hasNext()){
                 if(wholeNumbers.indexOf(word.read())!=-1){
                     return F;
+                }else{
+                    return FailingState.Fail;
                 }
             }
             return AcceptingState.Accept;
@@ -136,6 +143,8 @@ enum States implements State {
             if(word.hasNext()){
                 if(naturalNumbers.indexOf(word.read())!=-1){
                     return F;
+                }else{
+                    return FailingState.Fail;
                 }
             }
             return AcceptingState.Accept;

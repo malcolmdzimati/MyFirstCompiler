@@ -5,9 +5,9 @@ public class Token{
     int current;
 
     public Token(int id, String _class, String content){
+        this.content = content;
         this._class = _class;
         this.id = Integer.toString(id);
-        this.content = content;
         current=0;
     }
 
@@ -18,7 +18,11 @@ public class Token{
 
     //setter for Token Class
     public void set_Class(String c){
-        _class = c;
+        if(content=="if" || content=="then" || content=="else" || content=="do" || content=="until" || content=="while" || content=="do" || content=="output" || content=="call" || content=="true" || content=="false" || content=="input" || content=="not" || content=="and" || content=="or" || content=="eq" || content=="larger" || content=="add" || content=="sub" || content=="mult" || content=="arr" || content=="num" || content=="bool" || content=="string" || content=="main" || content=="halt" || content=="proc" || content=="return"){
+            _class = "keyword";
+        }else{
+            _class = c;
+        }
     }
 
     public char read(){
