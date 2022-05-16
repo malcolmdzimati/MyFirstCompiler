@@ -6,7 +6,11 @@ public class Token{
 
     public Token(int id, String _class, String content){
         this.content = content;
-        this._class = _class;
+        if(content.equals("if") || content.equals("then") || content.equals("else") || content.equals("do") || content.equals("until") || content.equals("while") || content.equals("do") || content.equals("output") || content.equals("call") || content.equals("true") || content.equals("false") || content.equals("input") || content.equals("not") || content.equals("and") || content.equals("or") || content.equals("eq") || content.equals("larger") || content.equals("add") || content.equals("sub") || content.equals("mult") || content.equals("arr") || content.equals("num") || content.equals("bool") || content.equals("string") || content.equals("main") || content.equals("halt") || content.equals("proc") || content.equals("return")){
+            this._class = "keyword";
+        }else{
+            this._class = _class;
+        }
         this.id = Integer.toString(id);
         current=0;
     }
@@ -18,11 +22,7 @@ public class Token{
 
     //setter for Token Class
     public void set_Class(String c){
-        if(content=="if" || content=="then" || content=="else" || content=="do" || content=="until" || content=="while" || content=="do" || content=="output" || content=="call" || content=="true" || content=="false" || content=="input" || content=="not" || content=="and" || content=="or" || content=="eq" || content=="larger" || content=="add" || content=="sub" || content=="mult" || content=="arr" || content=="num" || content=="bool" || content=="string" || content=="main" || content=="halt" || content=="proc" || content=="return"){
-            _class = "keyword";
-        }else{
-            _class = c;
-        }
+        _class = c;
     }
 
     public char read(){
@@ -56,5 +56,10 @@ public class Token{
     //getter for Token Contents
     public String getContent(){
         return content;
+    }
+
+    @Override
+    public String toString(){
+        return "<ID: "+id+", Class: "+_class+", Content: "+content+">\n";
     }
 }

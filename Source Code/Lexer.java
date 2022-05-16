@@ -15,12 +15,12 @@ public class Lexer{
     public void printToken(){
         for(int i=0; i<tokenLen; i++){
             if (DFA.check(tokens[i])){
-                System.out.println("Accept");
+                System.out.print("Accept: ");
             }else{
-                System.out.println("Reject");
+                System.out.print("Reject: ");
             }
 
-            System.out.println("\t"+tokens[i].get_Class()+": "+tokens[i].getContent()+"\n");
+            System.out.print(tokens[i]);
         }
     }
 
@@ -61,13 +61,13 @@ public class Lexer{
                     }
                 }else if(ct==' ' || ct=='\t' || ct=='\r'){//Not in ShortString and breakage of Line
                     if(tk.length()!=0){
-                        tokens[numToken] = new Token(numToken, "Unamed", tk);
+                        tokens[numToken] = new Token(numToken, "userDefinedName", tk);
                         tk="";
                         numToken++;
                     }
                 }else if(ml.indexOf(ct) != -1 || qm.indexOf(ct) != -1){//Things that don't need a space between the character
                     if(tk.length()!=0){
-                        tokens[numToken] = new Token(numToken, "Unamed", tk);
+                        tokens[numToken] = new Token(numToken, "userDefinedName", tk);
                         tk="";
                         numToken++;
                     }
@@ -88,7 +88,7 @@ public class Lexer{
                             //Throw Error
                         }
                     }else{
-                        tokens[numToken] = new Token(numToken, "", ct+"");
+                        tokens[numToken] = new Token(numToken, "Separator", ct+"");
                         numToken++;
                     }
                 }else{
@@ -98,7 +98,7 @@ public class Lexer{
                 }
             }
             if(tk.length()!=0){
-                tokens[numToken] = new Token(numToken, "Unamed", tk);
+                tokens[numToken] = new Token(numToken, "userDefinedName", tk);
                 numToken++;
             }
         }

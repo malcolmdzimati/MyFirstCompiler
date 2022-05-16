@@ -1,0 +1,148 @@
+proc procd1
+{
+    output := 9652;
+    lhsvar1 := var1wnum1;
+    varfield1[var] := varassign1[45];
+    constfield1[true] := not(input(invar));
+    constfield2["SHORT STRING 69"] := larger(input(invar2), not(eq(eq1, eq2)));
+
+    if (iffield[false]) then
+    {
+
+    }
+    else
+    {
+        while (true) do
+        {
+            output := true;
+        };
+    };
+
+    if (not(or(or1, or2))) then
+    {
+        ifvar := 50;
+    };
+
+    do
+    {
+        call pcall1two;
+    }
+    until (mult(mult1, mult2));
+
+    while (true) do
+    {
+        lehsvar := sub(sub1, bus2);
+    };
+
+    return;
+
+    num numvar;
+    bool boolvar;
+    string stringvar;
+
+    arr num [69] numarr;
+    arr bool [true] boolarr;
+    arr bool [false] boolarr;
+    arr string ["SHORT"] stringarr;
+
+},
+proc procd2
+{
+    proc procd1
+    {
+        output := 9652;
+        lhsvar1 := var1wnum1;
+        varfield1[var] := varassign1[45];
+        constfield1[true] := not(input(invar));
+        constfield2["SHORT STRING 69"] := larger(input(invar2), not(eq(eq1, eq2)));
+
+        if (iffield[false]) then
+        {
+
+        }
+        else
+        {
+            while (true) do
+            {
+                output := true;
+            };
+        };
+
+        if (not(or(or1, or2))) then
+        {
+            ifvar := 50;
+        };
+
+        do
+        {
+            call pcall1two;
+        }
+        until (mult(mult1, mult2));
+
+        while (true) do
+        {
+            lehsvar := sub(sub1, bus2);
+        };
+
+        return;
+
+        num numvar;
+        bool boolvar;
+        string stringvar;
+
+        arr num [69] numarr;
+        arr bool [true] boolarr;
+        arr bool [false] boolarr;
+        arr string ["SHORT"] stringarr;
+
+    },
+
+    return;
+},
+main
+{
+    output := 9652;
+    lhsvar1 := var1wnum1;
+    varfield1[var] := varassign1[45];
+    constfield1[true] := not(input(invar));
+    constfield2["SHORT STRING 69"] := larger(input(invar2), not(eq(eq1, eq2)));
+
+    if (iffield[false]) then
+    {
+
+    }
+    else
+    {
+        while (true) do
+        {
+            output := true;
+        };
+    };
+
+    if (not(or(or1, or2))) then
+    {
+        ifvar := 50;
+    };
+
+    do
+    {
+        call pcall1two;
+    }
+    until (mult(mult1, mult2));
+
+    while (true) do
+    {
+        lehsvar := sub(sub1, bus2);
+    };
+
+    halt;
+
+    num numvar;
+    bool boolvar;
+    string stringvar;
+
+    arr num [69] numarr;
+    arr bool [true] boolarr;
+    arr bool [false] boolarr;
+    arr string ["SHORT"] stringarr;
+}

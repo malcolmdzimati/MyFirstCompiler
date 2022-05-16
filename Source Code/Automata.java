@@ -48,9 +48,10 @@ enum States implements State {
                 if(colon.indexOf(c)!=-1){
                     return B;
                 }else if(symbols.indexOf(c)!=-1){
+                    if(c=='0')
+                        word.set_Class("Number");
                     return C;
                 }else if(smallAlpha.indexOf(c)!=-1){
-                    //word.set_Class("userDefinedNames");
                     return D;
                 }else if(quotation.indexOf(c)!=-1){
                     return E;

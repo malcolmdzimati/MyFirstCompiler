@@ -1,5 +1,5 @@
 aa
-:= "HELLO ASAF FAS "
+:= "HLELLO ASAF FAS "
 324 { efdsfsef
                     boo2l
 
@@ -9,5 +9,5 @@ aa
             -1034543534
 num
 0
-main{""proc      "ASFV"      56245  56.2  I; := =
+main{""proc      "AlSFV"      56245  56.2  I; := =
 
