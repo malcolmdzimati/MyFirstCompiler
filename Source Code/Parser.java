@@ -111,4 +111,47 @@ public class Parser{
         }
 
     }
+
+    public void parse_Instr(){
+
+    }
+
+    public void parse_Assign(){
+        parse_LHS();
+        if(getNextToken().getContent().equals(":=")){
+            parse_Expr();
+        }else{
+            String error = "Procedure parse_Assign() expected a ':=' token " + "but received: " + currentToken.getContent();
+        }
+    }
+
+    public void parse_Branch(){
+        if(getNextToken().getContent().equals("if")){
+            if(getNextToken().getContent().equals("(")){
+                parse_Expr();
+                if(getNextToken().getContent().equals(")")){
+                    if(getNextToken().getContent().equals("then")){
+                        if(getNextToken().getContent().equals("{")){
+                            parse_Algorithm();
+                            if(getNextToken().getContent().equals("}")){
+                                parse_Alternate();
+                            }else{
+                                String error = "Procedure parse_Branch() expected a '}' token " + "but received: " + currentToken.getContent();
+                            }
+                        }else{
+                            String error = "Procedure parse_Branch() expected a '{' token " + "but received: " + currentToken.getContent();
+                        }
+                    }else{
+                        String error = "Procedure parse_Branch() expected a 'then' token " + "but received: " + currentToken.getContent();
+                    }
+                }else{
+                    String error = "Procedure parse_Branch() expected a ')' token " + "but received: " + currentToken.getContent();
+                }
+            }else{
+                String error = "Procedure parse_Branch() expected a '(' token " + "but received: " + currentToken.getContent();
+            }
+        }else{
+            String error = "Procedure parse_Branch() expected a 'if' token " + "but received: " + currentToken.getContent();
+        }
+    }
 }
