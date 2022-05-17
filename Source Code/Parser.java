@@ -19,8 +19,12 @@ public class Parser{
         this.length = length;
     }
 
-    public void parse_SPLProgr(){
-        parse_ProcDefs();
+    public void parse_SPLProgr() throws ParserErrorException {
+        try{
+            parse_ProcDefs();
+        }catch(ParserErrorException e){
+            throw e;
+        }
         if(getNextToken().getContent().equals("main")){
             if(getNextToken().getContent().equals("{")){
                 parse_Algorithm();
@@ -31,22 +35,27 @@ public class Parser{
                             return;
                         }else{
                             String error = "Procedure parse_SPLProgr() expected a '}' token " + "but received: " + currentToken.getContent();
+                            throw new ParserErrorException(error);
                         }
                     }else{
                             String error = "Procedure parse_SPLProgr() expected a ';' token " + "but received: " + currentToken.getContent();
+                            throw new ParserErrorException(error);
                     }
                 }else{
                     String error = "Procedure parse_SPLProgr() expected a 'halt' token " + "but received: " + currentToken.getContent();
+                    throw new ParserErrorException(error);
                 }
             }else{
                 String error = "Procedure parse_SPLProgr() expected a '{' token " + "but received: " + currentToken.getContent();
+                throw new ParserErrorException(error);
             }
         }else{
             String error = "Procedure parse_SPLProgr() expected a 'main' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
     }
 
-    public void parse_ProcDefs(){
+    public void parse_ProcDefs() throws ParserErrorException{
         String procdefsfollows = "main return if do while call output";
         if(procdefsfollows.indexOf( getNextToken().getContent()) != -1 || currentToken.get_Class().equals("userDefinedName")){
             return;
@@ -59,16 +68,21 @@ public class Parser{
             parse_ProcDefs();
         }else{
             String error = "Procedure parse_ProcDefs() expected a ',' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
 
         //Throw an error
     }
 
-    public void parse_PD(){
+    public void parse_PD() throws ParserErrorException{
         if(getNextToken().getContent().equals("proc")){
             if(getNextToken().get_Class().equals("userDefinedName")){
                 if(getNextToken().getContent().equals("{")){
-                    parse_ProcDefs();
+                    try{
+                        parse_ProcDefs();
+                    }catch(ParserErrorException e){
+                        throw e;
+                    }
                     parse_Algorithm();
                     if(getNextToken().getContent().equals("return")){
                         if(getNextToken().getContent().equals(";")){
@@ -77,21 +91,27 @@ public class Parser{
                                 return;
                             }else{
                                 String error = "Procedure parse_PD() expected a '}' token " + "but received: " + currentToken.getContent();
+                                throw new ParserErrorException(error);
                             }
                         }else{
                             String error = "Procedure parse_PD() expected a ';' token " + "but received: " + currentToken.getContent();
+                            throw new ParserErrorException(error);
                         }
                     }else{
                         String error = "Procedure parse_PD() expected a 'return' token " + "but received: " + currentToken.getContent();
+                        throw new ParserErrorException(error);
                     }
                 }else{
                     String error = "Procedure parse_PD() expected a '}' token " + "but received: " + currentToken.getContent();
+                    throw new ParserErrorException(error);
                 }
             }else{
                 String error = "Procedure parse_PD() expected a 'userDefinedName' token " + "but received: " + currentToken.get_Class();
+                throw new ParserErrorException(error);
             }
         }else{
             String error = "Procedure parse_PD() expected a 'proc' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
     }
 
