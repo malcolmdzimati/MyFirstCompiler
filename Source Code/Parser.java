@@ -239,12 +239,55 @@ public class Parser{
         }
     }
 
+    public void parse_Expr(){
+
+    }
+
     public void parse_PCall(){
         if(getNextToken().getContent().equals("call")){
             if(getNextToken().get_Class().equals("userDefinedName")){
 
             }else{
-                String error = "Procedure parse_PCall() expected a 'call' token " + "but received: " + currentToken.getContent();
+                String error = "Procedure parse_PCall() expected a 'userDefinedName' token " + "but received: " + currentToken.get_Class();
+            }
+        }else{
+            String error = "Procedure parse_PCall() expected a 'call' token " + "but received: " + currentToken.getContent();
+        }
+    }
+
+    public void parse_Var(){
+        if(getNextToken().get_Class().equals("userDefinedName")){
+
+        }else{
+            String error = "Procedure parse_PCall() expected a 'userDefinedName' token " + "but received: " + currentToken.getContent();
+        }
+    }
+
+    public boolean ll_Var(){
+        boolean ll = false;
+        if(getNextToken().get_Class().equals("userDefinedName")){
+            ll=true;
+        }
+        getPToken();
+        return ll;
+    }
+
+    public void parse_Field(){
+        if(getNextToken().get_Class().equals("userDefinedName")){
+            if(getNextToken().getContent().equals("[")){
+                if(ll_Var()){
+                    parse_Var();
+                }else {
+                    parse_Const();
+                }
+
+                if(getNextToken().getContent().equals("[")){
+
+                }else{
+                    String error = "Procedure parse_PCall() expected a ']' token " + "but received: " + currentToken.getContent();
+                }
+            }else{
+                String error = "Procedure parse_PCall() expected a '[' token " + "but received: " + currentToken.getContent();
             }
         }else{
             String error = "Procedure parse_PCall() expected a 'userDefinedName' token " + "but received: " + currentToken.get_Class();
