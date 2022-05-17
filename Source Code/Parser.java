@@ -47,8 +47,8 @@ public class Parser{
     }
 
     public void parse_ProcDefs(){
-        String procdefsfollows = "main return if do while call output userDefinedName";
-        if(procdefsfollows.indexOf( getNextToken().getContent()) != -1){
+        String procdefsfollows = "main return if do while call output";
+        if(procdefsfollows.indexOf( getNextToken().getContent()) != -1 || currentToken.get_Class().equals("userDefinedName")){
             return;
         }
 
@@ -161,9 +161,9 @@ public class Parser{
             return;
         }
 
-        getPToken();
+        //getPToken();
 
-        if(getNextToken().getContent().equals("else")){
+        if(currentToken.getContent().equals("else")){
             if(getNextToken().getContent().equals("{")){
                 parse_Algorithm();
                 if(getNextToken().getContent().equals("}")){
@@ -235,8 +235,10 @@ public class Parser{
 
     public void parse_LHS(){
         if(getNextToken().getContent().equals("output")){
-
+            return;
         }
+
+        getPToken();
     }
 
     public void parse_Expr(){
@@ -281,7 +283,7 @@ public class Parser{
                     parse_Const();
                 }
 
-                if(getNextToken().getContent().equals("[")){
+                if(getNextToken().getContent().equals("]")){
 
                 }else{
                     String error = "Procedure parse_PCall() expected a ']' token " + "but received: " + currentToken.getContent();
@@ -297,11 +299,11 @@ public class Parser{
     public void parse_Const(){
         if(getNextToken().get_Class().equals("ShortString")){
 
-        }else if(getNextToken().get_Class().equals("Number")){
+        }else if(currentToken.get_Class().equals("Number")){
 
-        }else if(getNextToken().getContent().equals("true")){
+        }else if(currentToken.getContent().equals("true")){
 
-        }else if(getNextToken().getContent().equals("false")){
+        }else if(currentToken.getContent().equals("false")){
 
         }else{
             String error = "Procedure parse_PConst() expected a 'shortString' or 'Number' or 'true' or 'false' token " + "but received: " + currentToken.getContent();
@@ -393,6 +395,15 @@ public class Parser{
         }else{
             parse_TYP();
             parse_Var();
+        }
+    }
+
+    public void parse_TYP(){
+        String typ = "num bool string";
+        if(typ.indexOf( getNextToken().getContent()) != -1){
+            return;
+        }else{
+           String error = "Procedure parse_TYP() expected a 'num' or 'bool' or 'string' token " + "but received: " + currentToken.getContent();
         }
     }
 }
