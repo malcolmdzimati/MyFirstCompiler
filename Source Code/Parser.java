@@ -250,11 +250,48 @@ public class Parser{
             return;
         }
 
-        getPToken();
+        if(currentToken.get_Class().equals("userDefinesName")){
+            if(ll_Var()){
+                getPToken();
+                parse_Field();
+                return;
+            }else{
+                getPToken();
+                parse_Var();
+                return;
+            }
+        }
+
+        //Throw an Error
     }
 
     public void parse_Expr(){
-
+        String binopgroup = "and or eq larger add sub mult";
+        String unopgroup = "input not";
+        if(binopgroup.indexOf( getNextToken().getContent()) != -1){
+            getPToken();
+            parse_BinOp();
+            return;
+        }else if(unopgroup.indexOf( currentToken.getContent()) != -1){
+            getPToken();
+            parse_UnOp();
+            return;
+        }else if(currentToken.get_Class().equals("userDefinesName")){
+            if(ll_Var()){
+                getPToken();
+                parse_Field();
+                return;
+            }else{
+                getPToken();
+                parse_Var();
+                return;
+            }
+        }else{
+            getPToken();
+            parse_Const();
+            return;
+        }
+        //Throw an error
     }
 
     public void parse_PCall(){
@@ -279,19 +316,20 @@ public class Parser{
 
     public boolean ll_Var(){
         boolean ll = false;
-        if(getNextToken().get_Class().equals("userDefinedName")){
+        if(tokens[current+1].get_Class().equals("userDefinedName")){
             ll=true;
         }
-        getPToken();
         return ll;
     }
 
     public void parse_Field(){
         if(getNextToken().get_Class().equals("userDefinedName")){
             if(getNextToken().getContent().equals("[")){
-                if(ll_Var()){
+                if(getNextToken().get_Class().equals("userDefinedName")){
+                    getPToken();
                     parse_Var();
                 }else {
+                    getPToken();
                     parse_Const();
                 }
 
