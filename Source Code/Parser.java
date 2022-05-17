@@ -320,8 +320,19 @@ public class Parser{
             }else{
                 String error =  "Procedure parse_UnOp() expected a '(' token " + "but received: " + currentToken.getContent();
             }
+        }else if(currentToken.getContent().equals("not")){
+            if(getNextToken().getContent().equals("(")){
+                parse_Expr();
+                if(getNextToken().getContent().equals(")")){
+
+                }else{
+                    String error =  "Procedure parse_UnOp() expected a ')' token " + "but received: " + currentToken.getContent();
+                }
+            }else{
+                String error =  "Procedure parse_UnOp() expected a '(' token " + "but received: " + currentToken.getContent();
+            }
         }else{
-            String error =  "Procedure parse_UnOp() expected a 'input' token " + "but received: " + currentToken.getContent();
+            String error =  "Procedure parse_UnOp() expected a 'input' or 'not' token " + "but received: " + currentToken.getContent();
         }
     }
 }
