@@ -335,4 +335,27 @@ public class Parser{
             String error =  "Procedure parse_UnOp() expected a 'input' or 'not' token " + "but received: " + currentToken.getContent();
         }
     }
+
+    public void parse_BinOp(){
+        String binopgroup = "and or eq larger add sub mult";
+        if(binopgroup.indexOf( getNextToken().getContent()) != -1){
+            if(getNextToken().getContent().equals("(")){
+                parse_Expr();
+                if(getNextToken().getContent().equals(",")){
+                    parse_Expr();
+                    if(getNextToken().getContent().equals(")")){
+
+                    }else{
+                        String error =  "Procedure parse_BinOp() expected a ')' token " + "but received: " + currentToken.getContent();
+                    }
+                }else{
+                    String error =  "Procedure parse_BinOp() expected a ',' token " + "but received: " + currentToken.getContent();
+                }
+            }else{
+                String error =  "Procedure parse_UnOp() expected a '(' token " + "but received: " + currentToken.getContent();
+            }
+        }else{
+            String error =  "Procedure parse_UnOp() expected a 'and' or 'or' 'eq' or 'larger' or 'add' or 'sub' or 'mult' token " + "but received: " + currentToken.getContent();
+        }
+    }
 }
