@@ -66,12 +66,14 @@ public class Parser{
 
         if(getNextToken().equals(",")){
             parse_ProcDefs();
+            return;
         }else{
             String error = "Procedure parse_ProcDefs() expected a ',' token " + "but received: " + currentToken.getContent();
             throw new ParserErrorException(error);
         }
 
         //Throw an error
+        //throw new ParserErrorException("Unexpected Token recieved: " + currentToken.getContent());
     }
 
     public void parse_PD() throws ParserErrorException{
@@ -80,10 +82,10 @@ public class Parser{
                 if(getNextToken().getContent().equals("{")){
                     try{
                         parse_ProcDefs();
+                        parse_Algorithm();
                     }catch(ParserErrorException e){
                         throw e;
                     }
-                    parse_Algorithm();
                     if(getNextToken().getContent().equals("return")){
                         if(getNextToken().getContent().equals(";")){
                             parse_VarDecl();
@@ -115,7 +117,7 @@ public class Parser{
         }
     }
 
-    public void parse_Algorithm(){
+    public void parse_Algorithm() throws ParserErrorException{
         String procdefsfollows = "halt return }";
         if(procdefsfollows.indexOf( getNextToken().getContent()) != -1){
             return;
@@ -126,19 +128,30 @@ public class Parser{
 
         if(getNextToken().equals(";")){
             parse_Algorithm();
+            return;
         }else{
             String error = "Procedure parse_Algorithm() expected a ';' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
         //Throw Error
+        //throw new ParserErrorException("Unexpected Token receieved: "+currentToken.getContent());
     }
 
-    public void parse_Instr(){
+    public void parse_Instr() throws ParserErrorException{
         if(getNextToken().getContent().equals("if")){
             getPToken();
-            parse_Branch();
+            try{
+                parse_Branch();
+            }catch (ParserErrorException e){
+                throw e;
+            }
         }else if(currentToken.getContent().equals("do") || currentToken.getContent().equals("while")){
             getPToken();
-            parse_Loop();
+            try{
+                parse_Loop();
+            }catch (ParserErrorException e){
+                throw e;
+            }
         }else if(currentToken.getContent().equals("call")){
             getPToken();
             parse_PCall();
@@ -157,37 +170,47 @@ public class Parser{
         }
     }
 
-    public void parse_Branch(){
+    public void parse_Branch() throws ParserErrorException{
         if(getNextToken().getContent().equals("if")){
             if(getNextToken().getContent().equals("(")){
                 parse_Expr();
                 if(getNextToken().getContent().equals(")")){
                     if(getNextToken().getContent().equals("then")){
                         if(getNextToken().getContent().equals("{")){
-                            parse_Algorithm();
+                            try{
+                                parse_Algorithm();
+                            }catch(ParserErrorException e){
+                                throw e;
+                            }
                             if(getNextToken().getContent().equals("}")){
                                 parse_Alternate();
                             }else{
                                 String error = "Procedure parse_Branch() expected a '}' token " + "but received: " + currentToken.getContent();
+                                throw new ParserErrorException(error);
                             }
                         }else{
                             String error = "Procedure parse_Branch() expected a '{' token " + "but received: " + currentToken.getContent();
+                            throw new ParserErrorException(error);
                         }
                     }else{
                         String error = "Procedure parse_Branch() expected a 'then' token " + "but received: " + currentToken.getContent();
+                        throw new ParserErrorException(error);
                     }
                 }else{
                     String error = "Procedure parse_Branch() expected a ')' token " + "but received: " + currentToken.getContent();
+                    throw new ParserErrorException(error);
                 }
             }else{
                 String error = "Procedure parse_Branch() expected a '(' token " + "but received: " + currentToken.getContent();
+                throw new ParserErrorException(error);
             }
         }else{
             String error = "Procedure parse_Branch() expected a 'if' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
     }
 
-    public void parse_Alternate(){
+    public void parse_Alternate() throws ParserErrorException{
         String procdefsfollows = ";";
         if(procdefsfollows.indexOf( getNextToken().getContent()) != -1){
             return;
@@ -197,24 +220,35 @@ public class Parser{
 
         if(currentToken.getContent().equals("else")){
             if(getNextToken().getContent().equals("{")){
-                parse_Algorithm();
+                try{
+                    parse_Algorithm();
+                }catch(ParserErrorException e){
+                    throw e;
+                }
                 if(getNextToken().getContent().equals("}")){
 
                 }else{
                     String error = "Procedure parse_ALternate() expected a '}' token " + "but received: " + currentToken.getContent();
+                    throw new ParserErrorException(error);
                 }
             }else{
                 String error = "Procedure parse_ALternate() expected a '{' token " + "but received: " + currentToken.getContent();
+                throw new ParserErrorException(error);
             }
         }else{
             String error = "Procedure parse_ALternate() expected a 'else' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
     }
 
-    public void parse_Loop(){
+    public void parse_Loop() throws ParserErrorException {
         if(getNextToken().getContent().equals("do")){
             if(getNextToken().getContent().equals("{")){
-                parse_Algorithm();
+                try{
+                    parse_Algorithm();
+                }catch(ParserErrorException e){
+                    throw e;
+                }
                 if(getNextToken().getContent().equals("}")){
                     if(getNextToken().getContent().equals("until")){
                         if(getNextToken().getContent().equals("(")){
@@ -223,18 +257,23 @@ public class Parser{
 
                             }else{
                                 String error = "Procedure parse_Loop() expected a ')' token " + "but received: " + currentToken.getContent();
+                                throw new ParserErrorException(error);
                             }
                         }else{
                             String error = "Procedure parse_Loop() expected a '(' token " + "but received: " + currentToken.getContent();
+                            throw new ParserErrorException(error);
                         }
                     }else{
                         String error = "Procedure parse_Loop() expected a 'until' token " + "but received: " + currentToken.getContent();
+                        throw new ParserErrorException(error);
                     }
                 }else{
                     String error = "Procedure parse_Loop() expected a '}' token " + "but received: " + currentToken.getContent();
+                    throw new ParserErrorException(error);
                 }
             }else{
                 String error = "Procedure parse_Loop() expected a '{' token " + "but received: " + currentToken.getContent();
+                throw new ParserErrorException(error);
             }
         }else if(currentToken.getContent().equals("while")){
             if(getNextToken().getContent().equals("(")){
@@ -242,26 +281,36 @@ public class Parser{
                 if(getNextToken().getContent().equals(")")){
                     if(getNextToken().getContent().equals("do")){
                         if(getNextToken().getContent().equals("{")){
-                            parse_Algorithm();
+                            try{
+                                parse_Algorithm();
+                            }catch(ParserErrorException e){
+                                throw e;
+                            }
                             if(getNextToken().getContent().equals("}")){
 
                             }else{
                                 String error = "Procedure parse_Loop() expected a '}' token " + "but received: " + currentToken.getContent();
+                                throw new ParserErrorException(error);
                             }
                         }else{
                             String error = "Procedure parse_Loop() expected a '{' token " + "but received: " + currentToken.getContent();
+                            throw new ParserErrorException(error);
                         }
                     }else{
                         String error = "Procedure parse_Loop() expected a 'do' token " + "but received: " + currentToken.getContent();
+                        throw new ParserErrorException(error);
                     }
                 }else{
                     String error = "Procedure parse_Loop() expected a ')' token " + "but received: " + currentToken.getContent();
+                    throw new ParserErrorException(error);
                 }
             }else{
                 String error = "Procedure parse_Loop() expected a '(' token " + "but received: " + currentToken.getContent();
+                throw new ParserErrorException(error);
             }
         }else{
             String error = "Procedure parse_Loop() expected a 'while' or 'do' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
     }
 
