@@ -113,7 +113,19 @@ public class Parser{
     }
 
     public void parse_Instr(){
-
+        if(getNextToken().getContent().equals("if")){
+            getPToken();
+            parse_Branch();
+        }else if(currentToken.getContent().equals("do") || currentToken.getContent().equals("while")){
+            getPToken();
+            parse_Loop();
+        }else if(currentToken.getContent().equals("call")){
+            getPToken();
+            parse_PCall();
+        }else{
+            getPToken();
+            parse_Assign();
+        }
     }
 
     public void parse_Assign(){
