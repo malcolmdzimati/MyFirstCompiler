@@ -352,10 +352,10 @@ public class Parser{
                     String error =  "Procedure parse_BinOp() expected a ',' token " + "but received: " + currentToken.getContent();
                 }
             }else{
-                String error =  "Procedure parse_UnOp() expected a '(' token " + "but received: " + currentToken.getContent();
+                String error =  "Procedure parse_BinOp() expected a '(' token " + "but received: " + currentToken.getContent();
             }
         }else{
-            String error =  "Procedure parse_UnOp() expected a 'and' or 'or' 'eq' or 'larger' or 'add' or 'sub' or 'mult' token " + "but received: " + currentToken.getContent();
+            String error =  "Procedure parse_BinOp() expected a 'and' or 'or' 'eq' or 'larger' or 'add' or 'sub' or 'mult' token " + "but received: " + currentToken.getContent();
         }
     }
 
@@ -372,6 +372,27 @@ public class Parser{
             parse_VarDecl();
         }else{
             String error = "Procedure parse_ProcDefs() expected a ';' token " + "but received: " + currentToken.getContent();
+        }
+
+        //throw error
+    }
+
+    public void parse_Dec(){
+        if(getNextToken().getContent().equals("arr")){
+            parse_TYP();
+            if(getNextToken().getContent().equals("[")){
+                parse_Const();
+                if(getNextToken().getContent().equals("]")){
+                    parse_Var();
+                }else{
+                    String error = "Procedure parse_Dec() expected a ']' token " + "but received: " + currentToken.getContent();
+                }
+            }else{
+                String error = "Procedure parse_Dec() expected a '[' token " + "but received: " + currentToken.getContent();
+            }
+        }else{
+            parse_TYP();
+            parse_Var();
         }
     }
 }
