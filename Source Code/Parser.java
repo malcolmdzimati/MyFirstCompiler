@@ -9,6 +9,11 @@ public class Parser{
         return currentToken;
     }
 
+    public Token getPToken(){
+        currentToken = tokens[--current];
+        return currentToken;
+    }
+
     public Parser(Token tokens[], int length){
         this.tokens=tokens;
         this.length = length;
@@ -42,18 +47,21 @@ public class Parser{
     }
 
     public void parse_ProcDefs(){
-        if(getNextToken().getContent().equals(" ")){
-            getNextToken();
+        String procdefsfollows = "main return if do while call output userDefinedName";
+        if(procdefsfollows.indexOf( getNextToken().getContent()) != -1){
             return;
         }
 
+        getPToken();
         parse_PD();
 
-        if(currentToken.equals(",")){
+        if(getNextToken().equals(",")){
             parse_ProcDefs();
         }else{
             String error = "Procedure parse_ProcDefs() expected a ',' token " + "but received: " + currentToken.getContent();
         }
+
+        //Throw an error
     }
 
     public void parse_PD(){
@@ -84,6 +92,20 @@ public class Parser{
             }
         }else{
             String error = "Procedure parse_PD() expected a 'proc' token " + "but received: " + currentToken.getContent();
+        }
+    }
+
+    public void parse_Algorithm(){
+        String procdefsfollows = "halt return }";
+        if(procdefsfollows.indexOf( getNextToken().getContent()) != -1){
+            return;
+        }
+
+        getPToken();
+        parse_Instr();
+
+        if(getNextToken().equals(";")){
+            parse_Algorithm();
         }
     }
 }
