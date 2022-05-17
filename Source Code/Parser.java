@@ -358,4 +358,20 @@ public class Parser{
             String error =  "Procedure parse_UnOp() expected a 'and' or 'or' 'eq' or 'larger' or 'add' or 'sub' or 'mult' token " + "but received: " + currentToken.getContent();
         }
     }
+
+    public void parse_VarDecl(){
+        String varDeclf = "}";
+        if(varDeclf.indexOf( getNextToken().getContent()) != -1){
+            return;
+        }
+
+        getPToken();
+        parse_Dec();
+
+        if(getNextToken().equals(";")){
+            parse_VarDecl();
+        }else{
+            String error = "Procedure parse_ProcDefs() expected a ';' token " + "but received: " + currentToken.getContent();
+        }
+    }
 }
