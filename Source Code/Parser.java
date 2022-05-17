@@ -109,7 +109,7 @@ public class Parser{
         }else{
             String error = "Procedure parse_Algorithm() expected a ';' token " + "but received: " + currentToken.getContent();
         }
-
+        //Throw Error
     }
 
     public void parse_Instr(){
@@ -152,6 +152,30 @@ public class Parser{
             }
         }else{
             String error = "Procedure parse_Branch() expected a 'if' token " + "but received: " + currentToken.getContent();
+        }
+    }
+
+    public void parse_Alternate(){
+        String procdefsfollows = ";";
+        if(procdefsfollows.indexOf( getNextToken().getContent()) != -1){
+            return;
+        }
+
+        getPToken();
+
+        if(getNextToken().getContent().equals("else")){
+            if(getNextToken().getContent().equals("{")){
+                parse_Algorithm();
+                if(getNextToken().getContent().equals("}")){
+
+                }else{
+                    String error = "Procedure parse_ALternate() expected a '}' token " + "but received: " + currentToken.getContent();
+                }
+            }else{
+                String error = "Procedure parse_ALternate() expected a '{' token " + "but received: " + currentToken.getContent();
+            }
+        }else{
+            String error = "Procedure parse_ALternate() expected a 'else' token " + "but received: " + currentToken.getContent();
         }
     }
 }
