@@ -161,12 +161,13 @@ public class Parser{
         }
     }
 
-    public void parse_Assign(){
+    public void parse_Assign() throws ParserErrorException{
         parse_LHS();
         if(getNextToken().getContent().equals(":=")){
             parse_Expr();
         }else{
             String error = "Procedure parse_Assign() expected a ':=' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
     }
 
@@ -314,7 +315,7 @@ public class Parser{
         }
     }
 
-    public void parse_LHS(){
+    public void parse_LHS() throws ParserErrorException{
         if(getNextToken().getContent().equals("output")){
             return;
         }
@@ -332,9 +333,10 @@ public class Parser{
         }
 
         //Throw an Error
+        throw new ParserErrorException("Unexpected Token: "+currentToken.getContent());
     }
 
-    public void parse_Expr(){
+    public void parse_Expr() throws ParserErrorException{
         String binopgroup = "and or eq larger add sub mult";
         String unopgroup = "input not";
         if(binopgroup.indexOf( getNextToken().getContent()) != -1){
@@ -348,7 +350,11 @@ public class Parser{
         }else if(currentToken.get_Class().equals("userDefinesName")){
             if(ll_Var()){
                 getPToken();
-                parse_Field();
+                try{
+                    parse_Field();
+                }catch(ParserErrorException e){
+                    throw e;
+                }
                 return;
             }else{
                 getPToken();
@@ -363,23 +369,26 @@ public class Parser{
         //Throw an error
     }
 
-    public void parse_PCall(){
+    public void parse_PCall() throws ParserErrorException{
         if(getNextToken().getContent().equals("call")){
             if(getNextToken().get_Class().equals("userDefinedName")){
 
             }else{
                 String error = "Procedure parse_PCall() expected a 'userDefinedName' token " + "but received: " + currentToken.get_Class();
+                throw new ParserErrorException(error);
             }
         }else{
             String error = "Procedure parse_PCall() expected a 'call' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
     }
 
-    public void parse_Var(){
+    public void parse_Var() throws ParserErrorException{
         if(getNextToken().get_Class().equals("userDefinedName")){
 
         }else{
             String error = "Procedure parse_PCall() expected a 'userDefinedName' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
     }
 
@@ -391,7 +400,7 @@ public class Parser{
         return ll;
     }
 
-    public void parse_Field(){
+    public void parse_Field() throws ParserErrorException{
         if(getNextToken().get_Class().equals("userDefinedName")){
             if(getNextToken().getContent().equals("[")){
                 if(getNextToken().get_Class().equals("userDefinedName")){
@@ -406,16 +415,19 @@ public class Parser{
 
                 }else{
                     String error = "Procedure parse_PCall() expected a ']' token " + "but received: " + currentToken.getContent();
+                    throw new ParserErrorException(error);
                 }
             }else{
                 String error = "Procedure parse_PCall() expected a '[' token " + "but received: " + currentToken.getContent();
+                throw new ParserErrorException(error);
             }
         }else{
             String error = "Procedure parse_PCall() expected a 'userDefinedName' token " + "but received: " + currentToken.get_Class();
+            throw new ParserErrorException(error);
         }
     }
 
-    public void parse_Const(){
+    public void parse_Const() throws ParserErrorException{
         if(getNextToken().get_Class().equals("ShortString")){
 
         }else if(currentToken.get_Class().equals("Number")){
@@ -426,10 +438,11 @@ public class Parser{
 
         }else{
             String error = "Procedure parse_PConst() expected a 'shortString' or 'Number' or 'true' or 'false' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
     }
 
-    public void parse_UnOp(){
+    public void parse_UnOp() throws ParserErrorException{
         if(getNextToken().getContent().equals("input")){
             if(getNextToken().getContent().equals("(")){
                 parse_Var();
@@ -437,50 +450,71 @@ public class Parser{
 
                 }else{
                     String error =  "Procedure parse_UnOp() expected a ')' token " + "but received: " + currentToken.getContent();
+                    throw new ParserErrorException(error);
                 }
             }else{
                 String error =  "Procedure parse_UnOp() expected a '(' token " + "but received: " + currentToken.getContent();
+                throw new ParserErrorException(error);
             }
         }else if(currentToken.getContent().equals("not")){
             if(getNextToken().getContent().equals("(")){
-                parse_Expr();
+                try{
+                   parse_Expr();
+                }catch(ParserErrorException e){
+                    throw e;
+                }
                 if(getNextToken().getContent().equals(")")){
 
                 }else{
                     String error =  "Procedure parse_UnOp() expected a ')' token " + "but received: " + currentToken.getContent();
+                    throw new ParserErrorException(error);
                 }
             }else{
                 String error =  "Procedure parse_UnOp() expected a '(' token " + "but received: " + currentToken.getContent();
+                throw new ParserErrorException(error);
             }
         }else{
             String error =  "Procedure parse_UnOp() expected a 'input' or 'not' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
     }
 
-    public void parse_BinOp(){
+    public void parse_BinOp() throws ParserErrorException{
         String binopgroup = "and or eq larger add sub mult";
         if(binopgroup.indexOf( getNextToken().getContent()) != -1){
             if(getNextToken().getContent().equals("(")){
-                parse_Expr();
+                try{
+                   parse_Expr();
+                }catch(ParserErrorException e){
+                    throw e;
+                }
                 if(getNextToken().getContent().equals(",")){
-                    parse_Expr();
+                    try{
+                        parse_Expr();
+                    }catch(ParserErrorException e){
+                        throw e;
+                    }
                     if(getNextToken().getContent().equals(")")){
 
                     }else{
                         String error =  "Procedure parse_BinOp() expected a ')' token " + "but received: " + currentToken.getContent();
+                        throw new ParserErrorException(error);
                     }
                 }else{
                     String error =  "Procedure parse_BinOp() expected a ',' token " + "but received: " + currentToken.getContent();
+                    throw new ParserErrorException(error);
                 }
             }else{
                 String error =  "Procedure parse_BinOp() expected a '(' token " + "but received: " + currentToken.getContent();
+                throw new ParserErrorException(error);
             }
         }else{
             String error =  "Procedure parse_BinOp() expected a 'and' or 'or' 'eq' or 'larger' or 'add' or 'sub' or 'mult' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
     }
 
-    public void parse_VarDecl(){
+    public void parse_VarDecl() throws ParserErrorException{
         String varDeclf = "}";
         if(varDeclf.indexOf( getNextToken().getContent()) != -1){
             return;
@@ -493,12 +527,13 @@ public class Parser{
             parse_VarDecl();
         }else{
             String error = "Procedure parse_ProcDefs() expected a ';' token " + "but received: " + currentToken.getContent();
+            throw new ParserErrorException(error);
         }
 
         //throw error
     }
 
-    public void parse_Dec(){
+    public void parse_Dec() throws ParserErrorException{
         if(getNextToken().getContent().equals("arr")){
             parse_TYP();
             if(getNextToken().getContent().equals("[")){
@@ -507,9 +542,11 @@ public class Parser{
                     parse_Var();
                 }else{
                     String error = "Procedure parse_Dec() expected a ']' token " + "but received: " + currentToken.getContent();
+                    throw new ParserErrorException(error);
                 }
             }else{
                 String error = "Procedure parse_Dec() expected a '[' token " + "but received: " + currentToken.getContent();
+                throw new ParserErrorException(error);
             }
         }else{
             parse_TYP();
@@ -517,12 +554,13 @@ public class Parser{
         }
     }
 
-    public void parse_TYP(){
+    public void parse_TYP() throws ParserErrorException{
         String typ = "num bool string";
         if(typ.indexOf( getNextToken().getContent()) != -1){
             return;
         }else{
            String error = "Procedure parse_TYP() expected a 'num' or 'bool' or 'string' token " + "but received: " + currentToken.getContent();
+           throw new ParserErrorException(error);
         }
     }
 }
