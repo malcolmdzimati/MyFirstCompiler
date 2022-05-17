@@ -293,4 +293,35 @@ public class Parser{
             String error = "Procedure parse_PCall() expected a 'userDefinedName' token " + "but received: " + currentToken.get_Class();
         }
     }
+
+    public void parse_Const(){
+        if(getNextToken().get_Class().equals("ShortString")){
+
+        }else if(getNextToken().get_Class().equals("Number")){
+
+        }else if(getNextToken().getContent().equals("true")){
+
+        }else if(getNextToken().getContent().equals("false")){
+
+        }else{
+            String error = "Procedure parse_PConst() expected a 'shortString' or 'Number' or 'true' or 'false' token " + "but received: " + currentToken.getContent();
+        }
+    }
+
+    public void parse_UnOp(){
+        if(getNextToken().getContent().equals("input")){
+            if(getNextToken().getContent().equals("(")){
+                parse_Var();
+                if(getNextToken().getContent().equals(")")){
+
+                }else{
+                    String error =  "Procedure parse_UnOp() expected a ')' token " + "but received: " + currentToken.getContent();
+                }
+            }else{
+                String error =  "Procedure parse_UnOp() expected a '(' token " + "but received: " + currentToken.getContent();
+            }
+        }else{
+            String error =  "Procedure parse_UnOp() expected a 'input' token " + "but received: " + currentToken.getContent();
+        }
+    }
 }
