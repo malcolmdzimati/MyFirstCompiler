@@ -23,10 +23,9 @@ public class Parser{
                     if(getNextToken().getContent().equals(";")){
                         parse_VarDecl();
                         if(getNextToken().getContent().equals("}")){
-                            getNextToken();
                             return;
                         }else{
-                            String error = "Procedure parse_SPLProgr() expected a 'main' token " + "but received: " + currentToken.getContent();
+                            String error = "Procedure parse_SPLProgr() expected a '}' token " + "but received: " + currentToken.getContent();
                         }
                     }else{
                             String error = "Procedure parse_SPLProgr() expected a ';' token " + "but received: " + currentToken.getContent();
@@ -39,6 +38,52 @@ public class Parser{
             }
         }else{
             String error = "Procedure parse_SPLProgr() expected a 'main' token " + "but received: " + currentToken.getContent();
+        }
+    }
+
+    public void parse_ProcDefs(){
+        if(getNextToken().getContent().equals(" ")){
+            getNextToken();
+            return;
+        }
+
+        parse_PD();
+
+        if(currentToken.equals(",")){
+            parse_ProcDefs();
+        }else{
+            String error = "Procedure parse_ProcDefs() expected a ',' token " + "but received: " + currentToken.getContent();
+        }
+    }
+
+    public void parse_PD(){
+        if(getNextToken().getContent().equals("proc")){
+            if(getNextToken().get_Class().equals("userDefinedName")){
+                if(getNextToken().getContent().equals("{")){
+                    parse_ProcDefs();
+                    parse_Algorithm();
+                    if(getNextToken().getContent().equals("return")){
+                        if(getNextToken().getContent().equals(";")){
+                            parse_VarDecl();
+                            if(getNextToken().getContent().equals("}")){
+                                return;
+                            }else{
+                                String error = "Procedure parse_PD() expected a '}' token " + "but received: " + currentToken.getContent();
+                            }
+                        }else{
+                            String error = "Procedure parse_PD() expected a ';' token " + "but received: " + currentToken.getContent();
+                        }
+                    }else{
+                        String error = "Procedure parse_PD() expected a 'return' token " + "but received: " + currentToken.getContent();
+                    }
+                }else{
+                    String error = "Procedure parse_PD() expected a '}' token " + "but received: " + currentToken.getContent();
+                }
+            }else{
+                String error = "Procedure parse_PD() expected a 'userDefinedName' token " + "but received: " + currentToken.get_Class();
+            }
+        }else{
+            String error = "Procedure parse_PD() expected a 'proc' token " + "but received: " + currentToken.getContent();
         }
     }
 }
