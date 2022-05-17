@@ -106,6 +106,9 @@ public class Parser{
 
         if(getNextToken().equals(";")){
             parse_Algorithm();
+        }else{
+            String error = "Procedure parse_Algorithm() expected a ';' token " + "but received: " + currentToken.getContent();
         }
+
     }
 }
