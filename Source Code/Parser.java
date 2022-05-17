@@ -232,4 +232,22 @@ public class Parser{
             String error = "Procedure parse_Loop() expected a 'while' or 'do' token " + "but received: " + currentToken.getContent();
         }
     }
+
+    public void parse_LHS(){
+        if(getNextToken().getContent().equals("output")){
+
+        }
+    }
+
+    public void parse_PCall(){
+        if(getNextToken().getContent().equals("call")){
+            if(getNextToken().get_Class().equals("userDefinedName")){
+
+            }else{
+                String error = "Procedure parse_PCall() expected a 'call' token " + "but received: " + currentToken.getContent();
+            }
+        }else{
+            String error = "Procedure parse_PCall() expected a 'userDefinedName' token " + "but received: " + currentToken.get_Class();
+        }
+    }
 }
