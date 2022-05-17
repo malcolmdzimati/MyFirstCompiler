@@ -22,12 +22,8 @@ public class Parser{
         currentToken = tokens[0];
     }
 
-    public void syntaxAnalysis(){
-        try{
-            parse_SPLProgr();
-        }catch (ParserErrorException e){
-            System.err.println(e+" TokenID: "+currentToken.getID());
-        }
+    public void syntaxAnalysis() throws ParserErrorException{
+        parse_SPLProgr();
     }
 
     public void parse_SPLProgr() throws ParserErrorException {

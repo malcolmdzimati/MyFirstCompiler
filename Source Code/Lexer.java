@@ -28,19 +28,14 @@ public class Lexer{
         }*/
     }
 
-    public void lexicalAnalysis(){
+    public void lexicalAnalysis() throws LexerErrorException{
         for(int i=0; i<tokenLen; i++){
-            try{
-                DFA.check(tokens[i]);
-                //System.out.println(tokens[i]);
-            }catch (LexerErrorException e){
-               System.err.println(e);
-            }
+            DFA.check(tokens[i]);
         }
     }
 
 
-    public void tokenize(){
+    public void tokenize() throws LexerErrorException{
         String ml = ":{}[],;()";
         String qm = "\"";
         int numToken=0;
@@ -61,7 +56,7 @@ public class Lexer{
                     if(qm.indexOf(ct)!=-1){
                         nBetweenB=false;
                         if(tk.length()>17){
-                            //Throw Error
+                            throw new LexerErrorException("Error: ShortString can't have a length greater than 15");
                         }else{
                             tokens[numToken] = new Token(numToken, "ShortString", tk);
                             numToken++;
@@ -94,7 +89,7 @@ public class Lexer{
                             numToken++;
                             j++;
                         }else{
-                            //Throw Error
+                            throw new LexerErrorException("Error unrecoginzed token: ':'");
                         }
                     }else{
                         tokens[numToken] = new Token(numToken, "Separator", ct+"");

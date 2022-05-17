@@ -72,12 +72,22 @@ public class Main{
 
         //Make Lexer and perform Lexical Analysis
         Lexer lexer = new Lexer(fileContent, fileSize);
-        lexer.tokenize();
-        lexer.lexicalAnalysis();
+        try{
+            lexer.tokenize();
+            lexer.lexicalAnalysis();
 
-        Parser parser = new Parser(lexer.getTokens(), lexer.getSize());
-        parser.syntaxAnalysis();
-        lexer.printToken();
+            Parser parser = new Parser(lexer.getTokens(), lexer.getSize());
+
+            try {
+                parser.syntaxAnalysis();
+                lexer.printToken();
+            } catch (ParserErrorException e) {
+                System.err.println(e);
+            }
+
+        }catch (LexerErrorException e){
+            System.err.println(e);
+        }
     }
 
 }
