@@ -12,6 +12,13 @@ public class Token{
             this._class = _class;
         }
         this.id = Integer.toString(id);
+
+        try {
+            int d = Integer.parseInt(content);
+            this._class = "Number";
+        } catch (NumberFormatException nfe) {
+
+        }
         current=0;
     }
 

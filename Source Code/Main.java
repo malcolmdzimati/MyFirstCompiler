@@ -73,6 +73,10 @@ public class Main{
         //Make Lexer and perform Lexical Analysis
         Lexer lexer = new Lexer(fileContent, fileSize);
         lexer.tokenize();
+        lexer.lexicalAnalysis();
+
+        Parser parser = new Parser(lexer.getTokens(), lexer.getSize());
+        parser.syntaxAnalysis();
         lexer.printToken();
     }
 

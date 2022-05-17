@@ -156,12 +156,15 @@ enum States implements State {
 }
 
 public class Automata {
-    public boolean check(Token token){
+    public void check(Token token) throws LexerErrorException{
         State s;
 
         for(s=States.A; !(s instanceof FinalState); s = s.next(token)){
 
         }
-        return s.toString() == "Accept";
+
+        if(!(s.toString() == "Accept")){
+            throw new LexerErrorException("Failed to Recoginze: " + token.getContent());
+        }
     }
 }

@@ -147,6 +147,7 @@ public class Parser{
             return;
         }
 
+        System.out.println(currentToken);
         parse_Instr();
 
         if(currentToken.getContent().equals(";")){
@@ -356,6 +357,7 @@ public class Parser{
             return;
         }
 
+        System.out.println(currentToken);
         if(currentToken.get_Class().equals("userDefinedName")){
             if(ll_Var()){
                 parse_Field();
@@ -371,11 +373,12 @@ public class Parser{
     }
 
     public void parse_Expr() throws ParserErrorException{
-        String tk = currentToken.getContent();
-        if(tk.equals("sub") || tk.equals("and") || tk.equals("or") || tk.equals("eq") || tk.equals("larger") || tk.equals("add") || tk.equals("mult")){
+        String binopgroup = "and or eq larger add sub mult";
+        String unopgroup = "input not";
+        if(binopgroup.indexOf( currentToken.getContent()) != -1){
             parse_BinOp();
             return;
-        }else if(tk.equals("input") || tk.equals("not")){
+        }else if(unopgroup.indexOf( currentToken.getContent()) != -1){
             parse_UnOp();
             return;
         }else if(currentToken.get_Class().equals("userDefinedName")){
@@ -511,8 +514,8 @@ public class Parser{
     }
 
     public void parse_BinOp() throws ParserErrorException{
-        String tk = currentToken.getContent();
-        if(tk.equals("sub") || tk.equals("and") || tk.equals("or") || tk.equals("eq") || tk.equals("larger") || tk.equals("add") || tk.equals("mult")){
+        String binopgroup = "and or eq larger add sub mult";
+        if(binopgroup.indexOf( currentToken.getContent()) != -1){
             getNextToken();
             if(currentToken.getContent().equals("(")){
                 getNextToken();
@@ -593,8 +596,8 @@ public class Parser{
     }
 
     public void parse_TYP() throws ParserErrorException{
-        String tk = currentToken.getContent();
-        if(tk.equals("num") || tk.equals("bool") || tk.equals("string")){
+        String typ = "num bool string";
+        if(typ.indexOf( currentToken.getContent()) != -1){
             getNextToken();
             return;
         }else{
