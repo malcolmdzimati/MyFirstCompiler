@@ -76,7 +76,7 @@ public class Main{
             lexer.tokenize();
             lexer.lexicalAnalysis();
 
-            Parser parser = new Parser(lexer.getTokens(), lexer.getSize());
+            Parser parser = new Parser(lexer.getTokens());
 
             try {
                 parser.syntaxAnalysis();

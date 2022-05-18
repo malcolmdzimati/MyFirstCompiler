@@ -1,9 +1,9 @@
-
+import java.util.ArrayList;
 
 public class Lexer{
     String[] code;
     int codeSize;
-    Token[] tokens = new Token[10000];
+    ArrayList<Token> tokens = new ArrayList<Token>();
     int tokenLen=0;
     Automata DFA = new Automata();
 
@@ -12,12 +12,12 @@ public class Lexer{
         codeSize = size;
     }
 
-    public Token[] getTokens(){
+    public ArrayList<Token> getTokens(){
         return tokens;
     }
 
     public int getSize(){
-        return tokenLen;
+        return tokens.size();
     }
 
     public void printToken(){
@@ -29,8 +29,8 @@ public class Lexer{
     }
 
     public void lexicalAnalysis() throws LexerErrorException{
-        for(int i=0; i<tokenLen; i++){
-            DFA.check(tokens[i]);
+        for(Token tk : tokens){
+            DFA.check(tk);
         }
     }
 
@@ -58,20 +58,20 @@ public class Lexer{
                         if(tk.length()>17){
                             throw new LexerErrorException("Error: ShortString can't have a length greater than 15");
                         }else{
-                            tokens[numToken] = new Token(numToken, "ShortString", tk);
+                            tokens.add(new Token(numToken, "ShortString", tk));
                             numToken++;
                             tk="";
                         }
                     }
                 }else if(ct==' ' || ct=='\t' || ct=='\r'){//Not in ShortString and breakage of Line
                     if(tk.length()!=0){
-                        tokens[numToken] = new Token(numToken, "userDefinedName", tk);
+                        tokens.add(new Token(numToken, "userDefinedName", tk));
                         tk="";
                         numToken++;
                     }
                 }else if(ml.indexOf(ct) != -1 || qm.indexOf(ct) != -1){//Things that don't need a space between the character
                     if(tk.length()!=0){
-                        tokens[numToken] = new Token(numToken, "userDefinedName", tk);
+                        tokens.add(new Token(numToken, "userDefinedName", tk));
                         tk="";
                         numToken++;
                     }
@@ -84,7 +84,7 @@ public class Lexer{
                         //numToken--;
                     }else if(ml.indexOf(ct)==0){
                         if(code[i].charAt(j+1) == '='){
-                            tokens[numToken] = new Token(numToken, "Assign", ":=");
+                            tokens.add(new Token(numToken, "Assign", ":="));
                             tk="";
                             numToken++;
                             j++;
@@ -92,7 +92,7 @@ public class Lexer{
                             throw new LexerErrorException("Error unrecoginzed token: ':'");
                         }
                     }else{
-                        tokens[numToken] = new Token(numToken, "Separator", ct+"");
+                        tokens.add(new Token(numToken, "Separator", ct+""));
                         numToken++;
                     }
                 }else{
@@ -102,7 +102,7 @@ public class Lexer{
                 }
             }
             if(tk.length()!=0){
-                tokens[numToken] = new Token(numToken, "userDefinedName", tk);
+                tokens.add(new Token(numToken, "userDefinedName", tk));
                 numToken++;
             }
         }

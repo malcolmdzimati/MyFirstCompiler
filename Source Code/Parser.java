@@ -1,49 +1,57 @@
+import java.io.File;
+import java.util.ArrayList;
+
 public class Parser{
-    Token tokens[];
-    int length;
+    ArrayList<Token> tokens;
     int current=0;
     Token currentToken;
+    String tree="";
 
     public Token getNextToken(){
         current++;
-        currentToken = tokens[current];
+        if(current==tokens.size()){
+            return null;
+        }
+        currentToken = tokens.get(current);
         return currentToken;
     }
 
     public Token getPToken(){
         current--;
-        currentToken = tokens[current];
+        currentToken = tokens.get(current);
         return currentToken;
     }
 
-    public Parser(Token tokens[], int length){
+    public Parser(ArrayList<Token> tokens){
         this.tokens=tokens;
-        this.length = length;
-        currentToken = tokens[0];
+        currentToken = tokens.get(0);
     }
 
     public void syntaxAnalysis() throws ParserErrorException{
         parse_SPLProgr();
+        System.out.println(tree);
     }
 
     public void parse_SPLProgr() throws ParserErrorException {
+        tree+="<SPLProgr>\n";
         try{
             parse_ProcDefs();
         }catch(ParserErrorException e){
             throw e;
         }
         if(currentToken.getContent().equals("main")){
-            getNextToken();
+            tree+=getNextToken();
             if(currentToken.getContent().equals("{")){
-                getNextToken();
+                tree+=getNextToken();
                 parse_Algorithm();
                 if(currentToken.getContent().equals("halt")){
-                    getNextToken();
+                    tree+=getNextToken();
                     if(currentToken.getContent().equals(";")){
-                        getNextToken();
+                        tree+=getNextToken();
                         parse_VarDecl();
                         if(currentToken.getContent().equals("}")){
-                            getNextToken();
+                            tree+=getNextToken();
+                            tree+="</SPLProgr>";
                             return;
                         }else{
                             String error = "Procedure parse_SPLProgr() expected a '}' token " + "but received: " + currentToken.getContent();
@@ -418,7 +426,7 @@ public class Parser{
 
     public boolean ll_Var(){
         boolean ll = false;
-        if(tokens[current+1].getContent().equals("[")){
+        if(tokens.get(current+1).getContent().equals("[")){
             ll=true;
         }
         return ll;
