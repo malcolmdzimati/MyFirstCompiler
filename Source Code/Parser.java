@@ -20,7 +20,16 @@ public class Parser{
     DocumentBuilder dBuilder;
     Document doc;
 
-    public Token getNextToken(){
+    public Token getNextToken(Element pr){
+        Element terminal = doc.createElement(currentToken.get_Class());
+        pr.appendChild(terminal);
+        Attr id = doc.createAttribute("ID");
+        terminal.setAttributeNode(id);
+        Attr content = doc.createAttribute("Content");
+        terminal.setAttributeNode(content);
+        id.setValue(currentToken.getID());
+        content.setValue(currentToken.getContent());
+
         current++;
         if(current==tokens.size()){
             return null;
@@ -41,7 +50,7 @@ public class Parser{
         this.filename = filename;
     }
 
-    public void appendTerminal(Element pr){
+    /*public void appendTerminal(Element pr){
         Element terminal = doc.createElement(currentToken.get_Class());
         pr.appendChild(terminal);
         Attr id = doc.createAttribute("ID");
@@ -50,9 +59,10 @@ public class Parser{
         terminal.setAttributeNode(content);
         id.setValue(currentToken.getID());
         content.setValue(currentToken.getContent());
-    }
+    }*/
 
     public void syntaxAnalysis() throws Exception{
+        filename = filename.replace(".txt", "TreeResult.xml");
         dbFactory = DocumentBuilderFactory.newInstance();
         dBuilder = dbFactory.newDocumentBuilder();
         doc = dBuilder.newDocument();
@@ -60,7 +70,7 @@ public class Parser{
         TransformerFactory transformerFactory = TransformerFactory.newInstance();
         Transformer transformer = transformerFactory.newTransformer();
         DOMSource source = new DOMSource(doc);
-        StreamResult result = new StreamResult(new File(filename+"Tree.xml"));
+        StreamResult result = new StreamResult(new File(filename));
         transformer.transform(source, result);
     }
 
@@ -73,22 +83,22 @@ public class Parser{
             throw e;
         }
         if(currentToken.getContent().equals("main")){
-            appendTerminal(SPLProgr);
-            getNextToken();
+            //appendTerminal(SPLProgr);
+            getNextToken(SPLProgr);
             if(currentToken.getContent().equals("{")){
-                appendTerminal(SPLProgr);
-                getNextToken();
+                //appendTerminal(SPLProgr);
+                getNextToken(SPLProgr);
                 parse_Algorithm(SPLProgr);
                 if(currentToken.getContent().equals("halt")){
-                    appendTerminal(SPLProgr);
-                    getNextToken();
+                    //appendTerminal(SPLProgr);
+                    getNextToken(SPLProgr);
                     if(currentToken.getContent().equals(";")){
-                        appendTerminal(SPLProgr);
-                        getNextToken();
+                        //appendTerminal(SPLProgr);
+                        getNextToken(SPLProgr);
                         parse_VarDecl(SPLProgr);
                         if(currentToken.getContent().equals("}")){
-                            appendTerminal(SPLProgr);
-                            getNextToken();
+                            //appendTerminal(SPLProgr);
+                            getNextToken(SPLProgr);
                             return;
                         }else{
                             String error = "Procedure parse_SPLProgr() expected a '}' token " + "but received: " + currentToken.getContent();
@@ -125,8 +135,8 @@ public class Parser{
         parse_PD(pr);
 
         if(currentToken.getContent().equals(",")){
-            appendTerminal(pr);
-            getNextToken();
+            //appendTerminal(pr);
+            getNextToken(pr);
             parse_ProcDefs(pr);
             return;
         }else{
@@ -143,14 +153,14 @@ public class Parser{
         par.appendChild(pD);
 
         if(currentToken.getContent().equals("proc")){
-            appendTerminal(pD);
-            getNextToken();
+            //appendTerminal(pD);
+            getNextToken(pD);
             if(currentToken.get_Class().equals("userDefinedName")){
-                appendTerminal(pD);
-                getNextToken();
+                //appendTerminal(pD);
+                getNextToken(pD);
                 if(currentToken.getContent().equals("{")){
-                    appendTerminal(pD);
-                    getNextToken();
+                    //appendTerminal(pD);
+                    getNextToken(pD);
                     try{
                         parse_ProcDefs(pD);
                         parse_Algorithm(pD);
@@ -158,15 +168,15 @@ public class Parser{
                         throw e;
                     }
                     if(currentToken.getContent().equals("return")){
-                        appendTerminal(pD);
-                        getNextToken();
+                        //appendTerminal(pD);
+                        getNextToken(pD);
                         if(currentToken.getContent().equals(";")){
-                            appendTerminal(pD);
-                            getNextToken();
+                            //appendTerminal(pD);
+                            getNextToken(pD);
                             parse_VarDecl(pD);
                             if(currentToken.getContent().equals("}")){
-                                appendTerminal(pD);
-                                getNextToken();
+                                //appendTerminal(pD);
+                                getNextToken(pD);
                                 return;
                             }else{
                                 String error = "Procedure parse_PD() expected a '}' token " + "but received: " + currentToken.getContent();
@@ -207,8 +217,8 @@ public class Parser{
         parse_Instr(algo);
 
         if(currentToken.getContent().equals(";")){
-            appendTerminal(algo);
-            getNextToken();
+            //appendTerminal(algo);
+            getNextToken(algo);
             parse_Algorithm(algo);
         }else{
             String error = "Procedure parse_Algorithm() expected a ';' token " + "but received: " + currentToken.getContent();
@@ -248,8 +258,8 @@ public class Parser{
         parse_LHS(ass);
 
         if(currentToken.getContent().equals(":=")){
-            appendTerminal(ass);
-            getNextToken();
+            //appendTerminal(ass);
+            getNextToken(ass);
             parse_Expr(ass);
         }else{
             String error = "Procedure parse_Assign() expected a ':=' token " + "but received: " + currentToken.getContent();
@@ -262,29 +272,29 @@ public class Parser{
         par.appendChild(br);
 
         if(currentToken.getContent().equals("if")){
-            appendTerminal(br);
-            getNextToken();
+            //appendTerminal(br);
+            getNextToken(br);
             if(currentToken.getContent().equals("(")){
-                appendTerminal(br);
-                getNextToken();
+                //appendTerminal(br);
+                getNextToken(br);
                 parse_Expr(br);
                 if(currentToken.getContent().equals(")")){
-                    appendTerminal(br);
-                    getNextToken();
+                    //appendTerminal(br);
+                    getNextToken(br);
                     if(currentToken.getContent().equals("then")){
-                        appendTerminal(br);
-                        getNextToken();
+                        //appendTerminal(br);
+                        getNextToken(br);
                         if(currentToken.getContent().equals("{")){
-                            appendTerminal(br);
-                            getNextToken();
+                            //appendTerminal(br);
+                            getNextToken(br);
                             try{
                                 parse_Algorithm(br);
                             }catch(ParserErrorException e){
                                 throw e;
                             }
                             if(currentToken.getContent().equals("}")){
-                                appendTerminal(br);
-                                getNextToken();
+                                //appendTerminal(br);
+                                getNextToken(br);
                                 parse_Alternate(br);
                             }else{
                                 String error = "Procedure parse_Branch() expected a '}' token " + "but received: " + currentToken.getContent();
@@ -325,19 +335,19 @@ public class Parser{
         //getPToken();
 
         if(currentToken.getContent().equals("else")){
-            appendTerminal(alt);
-            getNextToken();
+            //appendTerminal(alt);
+            getNextToken(alt);
             if(currentToken.getContent().equals("{")){
-                appendTerminal(alt);
-                getNextToken();
+                //appendTerminal(alt);
+                getNextToken(alt);
                 try{
                     parse_Algorithm(alt);
                 }catch(ParserErrorException e){
                     throw e;
                 }
                 if(currentToken.getContent().equals("}")){
-                    appendTerminal(alt);
-                    getNextToken();
+                    //appendTerminal(alt);
+                    getNextToken(alt);
                 }else{
                     String error = "Procedure parse_ALternate() expected a '}' token " + "but received: " + currentToken.getContent();
                     throw new ParserErrorException(error);
@@ -357,25 +367,25 @@ public class Parser{
         par.appendChild(loop);
 
         if(currentToken.getContent().equals("do")){
-            appendTerminal(loop);
-            getNextToken();
+            //appendTerminal(loop);
+            getNextToken(loop);
             if(currentToken.getContent().equals("{")){
-                appendTerminal(loop);
-                getNextToken();
+                //appendTerminal(loop);
+                getNextToken(loop);
                 parse_Algorithm(loop);
                 if(currentToken.getContent().equals("}")){
-                    appendTerminal(loop);
-                    getNextToken();
+                    //appendTerminal(loop);
+                    getNextToken(loop);
                     if(currentToken.getContent().equals("until")){
-                        appendTerminal(loop);
-                        getNextToken();
+                        //appendTerminal(loop);
+                        getNextToken(loop);
                         if(currentToken.getContent().equals("(")){
-                            appendTerminal(loop);
-                            getNextToken();
+                            //appendTerminal(loop);
+                            getNextToken(loop);
                             parse_Expr(loop);
                             if(currentToken.getContent().equals(")")){
-                                appendTerminal(loop);
-                                getNextToken();
+                                //appendTerminal(loop);
+                                getNextToken(loop);
                             }else{
                                 String error = "Procedure parse_Loop() expected a ')' token " + "but received: " + currentToken.getContent();
                                 throw new ParserErrorException(error);
@@ -397,29 +407,29 @@ public class Parser{
                 throw new ParserErrorException(error);
             }
         }else if(currentToken.getContent().equals("while")){
-            appendTerminal(loop);
-            getNextToken();
+            //appendTerminal(loop);
+            getNextToken(loop);
             if(currentToken.getContent().equals("(")){
-                appendTerminal(loop);
-                getNextToken();
+                //appendTerminal(loop);
+                getNextToken(loop);
                 parse_Expr(loop);
                 if(currentToken.getContent().equals(")")){
-                    appendTerminal(loop);
-                    getNextToken();
+                   //appendTerminal(loop);
+                    getNextToken(loop);
                     if(currentToken.getContent().equals("do")){
-                        appendTerminal(loop);
-                        getNextToken();
+                        //appendTerminal(loop);
+                        getNextToken(loop);
                         if(currentToken.getContent().equals("{")){
-                            appendTerminal(loop);
-                            getNextToken();
+                            //appendTerminal(loop);
+                            getNextToken(loop);
                             try{
                                 parse_Algorithm(loop);
                             }catch(ParserErrorException e){
                                 throw e;
                             }
                             if(currentToken.getContent().equals("}")){
-                                appendTerminal(loop);
-                                getNextToken();
+                                //appendTerminal(loop);
+                                getNextToken(loop);
                             }else{
                                 String error = "Procedure parse_Loop() expected a '}' token " + "but received: " + currentToken.getContent();
                                 throw new ParserErrorException(error);
@@ -451,8 +461,8 @@ public class Parser{
         par.appendChild(lh);
 
         if(currentToken.getContent().equals("output")){
-            appendTerminal(lh);
-            getNextToken();
+            //appendTerminal(lh);
+            getNextToken(lh);
             return;
         }
 
@@ -504,11 +514,11 @@ public class Parser{
         par.appendChild(pcall);
 
         if(currentToken.getContent().equals("call")){
-            appendTerminal(pcall);
-            getNextToken();
+            //appendTerminal(pcall);
+            getNextToken(pcall);
             if(currentToken.get_Class().equals("userDefinedName")){
-                appendTerminal(pcall);
-                getNextToken();
+                //appendTerminal(pcall);
+                getNextToken(pcall);
             }else{
                 String error = "Procedure parse_PCall() expected a 'userDefinedName' token " + "but received: " + currentToken.get_Class();
                 throw new ParserErrorException(error);
@@ -524,8 +534,8 @@ public class Parser{
         par.appendChild(vr);
 
         if(currentToken.get_Class().equals("userDefinedName")){
-            appendTerminal(vr);
-            getNextToken();
+            //appendTerminal(vr);
+            getNextToken(vr);
         }else{
             String error = "Procedure parse_PCall() expected a 'userDefinedName' token " + "but received: " + currentToken.getContent();
             throw new ParserErrorException(error);
@@ -545,19 +555,19 @@ public class Parser{
         par.appendChild(fd);
 
         if(currentToken.get_Class().equals("userDefinedName")){
-            appendTerminal(fd);
-            getNextToken();
+            //appendTerminal(fd);
+            getNextToken(fd);
             if(currentToken.getContent().equals("[")){
-                appendTerminal(fd);
-                getNextToken();
+                //appendTerminal(fd);
+                getNextToken(fd);
                 if(currentToken.get_Class().equals("userDefinedName")){
                     parse_Var(fd);
                 }else {
                     parse_Const(fd);
                 }
                 if(currentToken.getContent().equals("]")){
-                    appendTerminal(fd);
-                    getNextToken();
+                    //appendTerminal(fd);
+                    getNextToken(fd);
                 }else{
                     String error = "Procedure parse_Field() expected a ']' token " + "but received: " + currentToken.getContent();
                     throw new ParserErrorException(error);
@@ -577,17 +587,17 @@ public class Parser{
         par.appendChild(con);
 
         if(currentToken.get_Class().equals("ShortString")){
-            appendTerminal(con);
-            getNextToken();
+            //appendTerminal(con);
+            getNextToken(con);
         }else if(currentToken.get_Class().equals("Number")){
-            appendTerminal(con);
-            getNextToken();
+            //appendTerminal(con);
+            getNextToken(con);
         }else if(currentToken.getContent().equals("true")){
-            appendTerminal(con);
-            getNextToken();
+            //appendTerminal(con);
+            getNextToken(con);
         }else if(currentToken.getContent().equals("false")){
-            appendTerminal(con);
-            getNextToken();
+            //appendTerminal(con);
+            getNextToken(con);
         }else{
             String error = "Procedure parse_Const() expected a 'shortString' or 'Number' or 'true' or 'false' token " + "but received: " + currentToken.getContent() + " Class: " + currentToken.get_Class();
             throw new ParserErrorException(error);
@@ -599,15 +609,15 @@ public class Parser{
         par.appendChild(uop);
 
         if(currentToken.getContent().equals("input")){
-            appendTerminal(uop);
-            getNextToken();
+            //appendTerminal(uop);
+            getNextToken(uop);
             if(currentToken.getContent().equals("(")){
-                appendTerminal(uop);
-                getNextToken();
+                //appendTerminal(uop);
+                getNextToken(uop);
                 parse_Var(uop);
                 if(currentToken.getContent().equals(")")){
-                    appendTerminal(uop);
-                    getNextToken();
+                    //appendTerminal(uop);
+                    getNextToken(uop);
                 }else{
                     String error =  "Procedure parse_UnOp() expected a ')' token " + "but received: " + currentToken.getContent();
                     throw new ParserErrorException(error);
@@ -617,19 +627,19 @@ public class Parser{
                 throw new ParserErrorException(error);
             }
         }else if(currentToken.getContent().equals("not")){
-            appendTerminal(uop);
-            getNextToken();
+            //appendTerminal(uop);
+            getNextToken(uop);
             if(currentToken.getContent().equals("(")){
-                appendTerminal(uop);
-                getNextToken();
+                //appendTerminal(uop);
+                getNextToken(uop);
                 try{
                    parse_Expr(uop);
                 }catch(ParserErrorException e){
                     throw e;
                 }
                 if(currentToken.getContent().equals(")")){
-                    appendTerminal(uop);
-                    getNextToken();
+                    //appendTerminal(uop);
+                    getNextToken(uop);
                 }else{
                     String error =  "Procedure parse_UnOp() expected a ')' token " + "but received: " + currentToken.getContent();
                     throw new ParserErrorException(error);
@@ -650,27 +660,27 @@ public class Parser{
 
         String tk = currentToken.getContent();
         if(tk.equals("sub") || tk.equals("and") || tk.equals("or") || tk.equals("eq") || tk.equals("larger") || tk.equals("add") || tk.equals("mult")){
-            appendTerminal(binop);
-            getNextToken();
+            //appendTerminal(binop);
+            getNextToken(binop);
             if(currentToken.getContent().equals("(")){
-                appendTerminal(binop);
-                getNextToken();
+                //appendTerminal(binop);
+                getNextToken(binop);
                 try{
                    parse_Expr(binop);
                 }catch(ParserErrorException e){
                     throw e;
                 }
                 if(currentToken.getContent().equals(",")){
-                    appendTerminal(binop);
-                    getNextToken();
+                    //appendTerminal(binop);
+                    getNextToken(binop);
                     try{
                         parse_Expr(binop);
                     }catch(ParserErrorException e){
                         throw e;
                     }
                     if(currentToken.getContent().equals(")")){
-                        appendTerminal(binop);
-                        getNextToken();
+                        //appendTerminal(binop);
+                        getNextToken(binop);
                     }else{
                         String error =  "Procedure parse_BinOp() expected a ')' token " + "but received: " + currentToken.getContent();
                         throw new ParserErrorException(error);
@@ -702,8 +712,8 @@ public class Parser{
         parse_Dec(vd);
 
         if(currentToken.getContent().equals(";")){
-            appendTerminal(vd);
-            getNextToken();
+            //appendTerminal(vd);
+            getNextToken(vd);
             parse_VarDecl(vd);
         }else{
             String error = "Procedure parse_VarDecl() expected a ';' token " + "but received: " + currentToken.getContent();
@@ -718,16 +728,16 @@ public class Parser{
         par.appendChild(de);
 
         if(currentToken.getContent().equals("arr")){
-            appendTerminal(de);
-            getNextToken();
+            //appendTerminal(de);
+            getNextToken(de);
             parse_TYP(de);
             if(currentToken.getContent().equals("[")){
-                appendTerminal(de);
-                getNextToken();
+                //appendTerminal(de);
+                getNextToken(de);
                 parse_Const(de);
                 if(currentToken.getContent().equals("]")){
-                    appendTerminal(de);
-                    getNextToken();
+                    //appendTerminal(de);
+                    getNextToken(de);
                     parse_Var(de);
                 }else{
                     String error = "Procedure parse_Dec() expected a ']' token " + "but received: " + currentToken.getContent();
@@ -749,8 +759,8 @@ public class Parser{
 
         String tk = currentToken.getContent();
         if(tk.equals("num") || tk.equals("bool") || tk.equals("string")){
-            appendTerminal(typ);
-            getNextToken();
+            //appendTerminal(typ);
+            getNextToken(typ);
             return;
         }else{
            String error = "Procedure parse_TYP() expected a 'num' or 'bool' or 'string' token " + "but received: " + currentToken.getContent();
