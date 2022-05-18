@@ -7,6 +7,7 @@
 Language used was Java on archlinux.
 Java used to test program on my side was:
 ```bash
+jar 18.0.1.1
 openjdk 18.0.1.1 2022-04-22
 OpenJDK Runtime Environment (build 18.0.1.1+2)
 OpenJDK 64-Bit Server VM (build 18.0.1.1+2, mixed mode)
