@@ -56,22 +56,22 @@ public class Lexer{
                     if(qm.indexOf(ct)!=-1){
                         nBetweenB=false;
                         if(tk.length()>17){
-                            throw new LexerErrorException("Error: ShortString can't have a length greater than 15");
+                            throw new LexerErrorException("[line: "+(i+1)+"] Error: ShortString can't have a length greater than 15");
                         }else{
-                            tokens.add(new Token(numToken, "ShortString", tk));
+                            tokens.add(new Token(numToken, "ShortString", tk, i));
                             numToken++;
                             tk="";
                         }
                     }
                 }else if(ct==' ' || ct=='\t' || ct=='\r'){//Not in ShortString and breakage of Line
                     if(tk.length()!=0){
-                        tokens.add(new Token(numToken, "userDefinedName", tk));
+                        tokens.add(new Token(numToken, "userDefinedName", tk, i));
                         tk="";
                         numToken++;
                     }
                 }else if(ml.indexOf(ct) != -1 || qm.indexOf(ct) != -1){//Things that don't need a space between the character
                     if(tk.length()!=0){
-                        tokens.add(new Token(numToken, "userDefinedName", tk));
+                        tokens.add(new Token(numToken, "userDefinedName", tk, i));
                         tk="";
                         numToken++;
                     }
@@ -84,15 +84,15 @@ public class Lexer{
                         //numToken--;
                     }else if(ml.indexOf(ct)==0){
                         if(code[i].charAt(j+1) == '='){
-                            tokens.add(new Token(numToken, "Assign", ":="));
+                            tokens.add(new Token(numToken, "Assign", ":=", i));
                             tk="";
                             numToken++;
                             j++;
                         }else{
-                            throw new LexerErrorException("Error unrecoginzed token: ':'");
+                            throw new LexerErrorException("[Line: "+(i+1)+"] Error unrecoginzed token: ':'");
                         }
                     }else{
-                        tokens.add(new Token(numToken, "Separator", ct+""));
+                        tokens.add(new Token(numToken, "Separator", ct+"", i));
                         numToken++;
                     }
                 }else{
@@ -102,7 +102,7 @@ public class Lexer{
                 }
             }
             if(tk.length()!=0){
-                tokens.add(new Token(numToken, "userDefinedName", tk));
+                tokens.add(new Token(numToken, "userDefinedName", tk, i));
                 numToken++;
             }
         }

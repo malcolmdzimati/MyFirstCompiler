@@ -45,8 +45,8 @@ proc procd1
     arr bool [false] boolarr;
     arr string ["SHORT"] stringarr;
 
-},
-proc procd2
+}
+,proc procd2
 {
     proc procd1
     {

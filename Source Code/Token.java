@@ -3,8 +3,9 @@ public class Token{
     String _class;                 //token type
     String content;              //actual instance of the token type
     int current;
+    String line;
 
-    public Token(int id, String _class, String content){
+    public Token(int id, String _class, String content, int line){
         this.content = content;
         if(content.equals("if") || content.equals("then") || content.equals("else") || content.equals("do") || content.equals("until") || content.equals("while") || content.equals("do") || content.equals("output") || content.equals("call") || content.equals("true") || content.equals("false") || content.equals("input") || content.equals("not") || content.equals("and") || content.equals("or") || content.equals("eq") || content.equals("larger") || content.equals("add") || content.equals("sub") || content.equals("mult") || content.equals("arr") || content.equals("num") || content.equals("bool") || content.equals("string") || content.equals("main") || content.equals("halt") || content.equals("proc") || content.equals("return")){
             this._class = "keyword";
@@ -12,7 +13,7 @@ public class Token{
             this._class = _class;
         }
         this.id = Integer.toString(id);
-
+        this.line = Integer.toString(line+1);
         try {
             int d = Integer.parseInt(content);
             this._class = "Number";
@@ -67,6 +68,6 @@ public class Token{
 
     @Override
     public String toString(){
-        return "<ID: "+id+", Class: "+_class+", Content: "+content+">\n";
+        return "[Line: " + line+ "] Token: '"+content+"' of Class: '" + _class + "' with ID: "+id;
     }
 }

@@ -43,7 +43,8 @@ public class Main{
 
     //Function to promt user for Filename and returns it as a string
     public static String readFileName(){
-        System.out.println("Please Enter Name of File in the same directory as jar file.");
+        System.out.println("Make Sure You have Familiarized yourself with ALL README.md files.");
+        System.out.println("Please Enter the Name of File, if no Directory is Specified it is Assumed that file is in the Current Directory.");
         System.out.print("Enter The Name of The File: ");
 
         Scanner read = new Scanner(System.in);
@@ -82,11 +83,11 @@ public class Main{
                 parser.syntaxAnalysis();
                 lexer.printToken();
             } catch (Exception e) {
-                System.err.println(e);
+                System.err.println("[SYNTAX ERROR]"+e);
             }
 
         }catch (LexerErrorException e){
-            System.err.println(e);
+            System.err.println("[LEXICAL ERROR]"+e);
         }
     }
 

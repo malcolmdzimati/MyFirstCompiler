@@ -164,7 +164,7 @@ public class Automata {
         }
 
         if(!(s.toString() == "Accept")){
-            throw new LexerErrorException("Failed to Recoginze: " + token.getContent());
+            throw new LexerErrorException("Failed to Recoginze: " + token);
         }
     }
 }
