@@ -38,10 +38,10 @@ This means that:
 2. Entering the directory and filename to a file that is contained within a directory that is in the same directory as the execuation file, look at folder eg2
 
 
-##Excution
+## Excution
 Provided Three Folders for different verions of the same runable code: Executable(.class), Executable(.jar) and implementation(SourceCode).
 
-##Executable(.class):
+## Executable(.class):
 contains '.class' files that can be run in the terminal with command line and command:
 ```bash
 make
@@ -53,7 +53,7 @@ make run
 
 Please do not move, alter or delete any of the files that are stored there(.'class') files)
 
-##Executable(.jar):
+## Executable(.jar):
 contains a compiler.jar that can be run with the provided makefile by using command line and command:
 ```bash
 make
@@ -63,7 +63,7 @@ or
 make run
 ```
 
-##Implementation(SourceCode)
+## Implementation(SourceCode)
 contains .Java files and actually implmementation of the code. a makefile is also provided to compile and run this coded if everthing else fails using provided command:
 ```bash
 make
@@ -74,7 +74,7 @@ make run
 ```
 
 
-##After Execution
+## After Execution
 After a Succesful run the program will stop and if no errors are returned it means the file was successful parsered and the resultant .xml will be contained in the same location as the input file.
 I repeat the resultant .xml file will be stored at the same place as the input file.
 The .xml file will be be name 'InputFileName'TreeResult.xml, e.g if the input filename was 'input.txt' then the .xml file will be 'inputTreeResult.txt'. 
@@ -82,9 +82,9 @@ Please make sure that the only presence of '.txt' as at the end of the filename 
 To rerun program just follow the above mention sections.
 If an error is encounted the program stops and description of error is provided. For more deatiled explantion of errors please look at the 'Possible Running Errors' section
 
-#Possible Running Errors
+# Possible Running Errors
 
-##File not Found
+## File not Found
 If filename was not found program, program will return error:
 ```bash
 ERROR: File not found. Please Make sure that the file exists and the filename and Directory you provided is correct.
@@ -92,7 +92,7 @@ ERROR: File not found. Please Make sure that the file exists and the filename an
 please make sure you read the section: 'General Description' or look at folders 'eg1' and 'eg2' as examples of how to provide input file, and please make sure the file is a text file '.txt'
 
 
-##[Lexer Error]
+## [Lexer Error]
 If there was a lexcial error in the file, an error like this will be returned:
 ```bash
 [LEXICAL ERROR]LexerErrorException: Failed to Recoginze: [Line: 16] Token: '-a' of Class: 'Number' with ID: 108
@@ -100,7 +100,7 @@ If there was a lexcial error in the file, an error like this will be returned:
 The first part details the error type i.e 'Lexer Error' and the Second part deatils the Exception class return the error 'LexerErrorException' then the rest just gives a description of the error 'Failed to Recginze' followed by the line number  '[Line: 16]' and the actucal cause of the problem '-a' and then more toeken info
 The line number specifies on which line the error occured with the first rowing being '1' and the second row being '2' 
 
-##[SYNTAX Error]
+## [SYNTAX Error]
 If there was a parser error an error like:
 ```bash
 [SYNTAX ERROR]ParserErrorException: Procedure parse_SPLProgr() expected a 'main' token but received: [Line: 1] Token: 'aa' of Class: 'userDefinedName' with ID: 0
