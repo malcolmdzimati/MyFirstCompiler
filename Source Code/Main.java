@@ -76,12 +76,12 @@ public class Main{
             lexer.tokenize();
             lexer.lexicalAnalysis();
 
-            Parser parser = new Parser(lexer.getTokens());
+            Parser parser = new Parser(lexer.getTokens(), fileName);
 
             try {
                 parser.syntaxAnalysis();
                 lexer.printToken();
-            } catch (ParserErrorException e) {
+            } catch (Exception e) {
                 System.err.println(e);
             }
 
