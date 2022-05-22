@@ -23,26 +23,42 @@ public class Parser{
     Token currentToken;
     String filename;
     int DEPTH_XML;
-    SyNode root;
+    SymbolNode root;
 
     DocumentBuilderFactory dbFactory;
     DocumentBuilder dBuilder;
     Document doc;
 
-    private void printNode(NodeList nodeList, int level, SyNode parent){
+    private void printNode(NodeList nodeList, int level, SymbolNode parent){
         level++;
 
       if (nodeList != null && nodeList.getLength() > 0) {
           for (int i = 0; i < nodeList.getLength(); i++) {
               Node node = nodeList.item(i);
+              Element pv=null;
+              if(i>0){
+                  Node prev = nodeList.item(i-1);
+                  pv = (Element)prev;
+              }
+
               if (node.getNodeType() == Node.ELEMENT_NODE) {
                   Element e = (Element)node;
                   String tkid = e.getAttribute("ID");
-                  String _class = node.getNodeName();
+                  String type;
+
+                  if( pv!=null && pv.getAttribute("Content").equals("proc")){
+                      type = "Procedure";
+                  }else{
+                      type = node.getNodeName();
+                  }
+
                   String content = e.getAttribute("Content");
 
-                  SyNode kid = new SyNode(parent, tkid, level+"", _class, content);
-                  parent.addChild(kid);
+                  SymbolNode kid = new SymbolNode(parent, tkid, level+"", type, content);
+
+                  if(!type.equals("Separator") && !type.equals("Nullable")/*&& !type.equals("ProcDefs") && !type.equals("PD") && !type.equals("Algorithm")*/){
+                      parent.addChild(kid);
+                    }
 
                   String result = String.format("%" + level * 5 + "s : [%s]%n", node.getNodeName()+" "+e.getAttribute("Content"), level);
                   //System.out.print(result);
@@ -129,7 +145,7 @@ public class Parser{
              // get all elements
              NodeList childNodes = doc.getChildNodes();
              Node r = childNodes.item(0);
-             root=new SyNode(null, "0", "1", r.getNodeName(), "");
+             root=new SymbolNode(null, "0", "0", r.getNodeName(), "");
              printNode(r.getChildNodes(), 0, root);
              System.out.println("Depth of XML : " + DEPTH_XML);
          } catch (SAXException | IOException e) {
@@ -138,20 +154,20 @@ public class Parser{
          printTree(root);
     }
 
-    private void printTree(SyNode root) {
-        int lvl = Integer.parseInt(root.getLevel());
-        String result=String.format("%" + lvl*5 + "s: [%s]%n", root.getClassName()+" "+root.getContents(), lvl);
+    private void printTree(SymbolNode root) {
+        int lvl = Integer.parseInt(root.getScopeID());
+        String result=String.format("%" + (lvl+1)*5 + "s: [%s]%n", root.getType()+" "+root.getValue(), lvl);
         System.out.print(result);
 
-        if (root.getContents()!=null) {
-            ArrayList<SyNode> nList=root.getChildren();
+        if (!root.getChildren().isEmpty()) {
+            ArrayList<SymbolNode> nList=root.getChildren();
 
             for (int i=0; i<nList.size(); i++)
-                printTree(nList.get(i));
+               printTree(nList.get(i));
         }
     }
 
-    public SyNode getAST(){
+    public SymbolNode getAST(){
         return root;
     }
 
