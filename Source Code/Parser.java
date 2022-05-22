@@ -140,14 +140,14 @@ public class Parser{
 
     private void printTree(SyNode root) {
         int lvl = Integer.parseInt(root.getLevel());
-        String result=String.format("%" + lvl*5 + "s: [%s]%n", root.getClassName(), lvl);
+        String result=String.format("%" + lvl*5 + "s: [%s]%n", root.getClassName()+" "+root.getContents(), lvl);
         System.out.print(result);
 
         if (root.getContents()!=null) {
             ArrayList<SyNode> nList=root.getChildren();
 
             for (int i=0; i<nList.size(); i++)
-                //printTree(nList.get(i));
+                printTree(nList.get(i));
         }
     }
 

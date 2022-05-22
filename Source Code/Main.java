@@ -81,6 +81,10 @@ public class Main{
 
             try {
                 parser.syntaxAnalysis();
+
+                StaticSemanticAnalysis sa = new StaticSemanticAnalysis(parser.getAST());
+                SyNode test = sa.getCurrent("procd1");
+                System.out.println(test.getContents()+" "+test.getLevel()+" "+test.getClassName());
                 //lexer.printToken();
             } catch (Exception e) {
                 System.err.println("[SYNTAX ERROR]"+e);
