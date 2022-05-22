@@ -9,16 +9,56 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class Parser{
     ArrayList<Token> tokens;
     int current=0;
     Token currentToken;
     String filename;
+    int DEPTH_XML;
+    SyNode root;
 
     DocumentBuilderFactory dbFactory;
     DocumentBuilder dBuilder;
     Document doc;
+
+    private void printNode(NodeList nodeList, int level, SyNode parent){
+        level++;
+
+      if (nodeList != null && nodeList.getLength() > 0) {
+          for (int i = 0; i < nodeList.getLength(); i++) {
+              Node node = nodeList.item(i);
+              if (node.getNodeType() == Node.ELEMENT_NODE) {
+                  Element e = (Element)node;
+                  String tkid = e.getAttribute("ID");
+                  String _class = node.getNodeName();
+                  String content = e.getAttribute("Content");
+
+                  SyNode kid = new SyNode(parent, tkid, level+"", _class, content);
+                  parent.addChild(kid);
+
+                  String result = String.format("%" + level * 5 + "s : [%s]%n", node.getNodeName()+" "+e.getAttribute("Content"), level);
+                  //System.out.print(result);
+
+                  printNode(node.getChildNodes(), level, kid);
+
+                  // how depth is it?
+                  if (level > DEPTH_XML) {
+                      DEPTH_XML = level;
+                  }
+
+              }
+
+          }
+      }
+    }
 
     public Token getNextToken(Element pr){
         Element terminal = doc.createElement(currentToken.get_Class());
@@ -80,6 +120,39 @@ public class Parser{
         DOMSource source = new DOMSource(doc);
         StreamResult result = new StreamResult(new File(filename));
         transformer.transform(source, result);
+
+         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+
+         try (InputStream is = new FileInputStream(filename)) {
+             DocumentBuilder db = dbf.newDocumentBuilder();
+             Document doc = db.parse(is);
+             // get all elements
+             NodeList childNodes = doc.getChildNodes();
+             Node r = childNodes.item(0);
+             root=new SyNode(null, "0", "1", r.getNodeName(), "");
+             printNode(r.getChildNodes(), 0, root);
+             System.out.println("Depth of XML : " + DEPTH_XML);
+         } catch (SAXException | IOException e) {
+             e.printStackTrace();
+         }
+         printTree(root);
+    }
+
+    private void printTree(SyNode root) {
+        int lvl = Integer.parseInt(root.getLevel());
+        String result=String.format("%" + lvl*5 + "s: [%s]%n", root.getClassName(), lvl);
+        System.out.print(result);
+
+        if (root.getContents()!=null) {
+            ArrayList<SyNode> nList=root.getChildren();
+
+            for (int i=0; i<nList.size(); i++)
+                //printTree(nList.get(i));
+        }
+    }
+
+    public SyNode getAST(){
+        return root;
     }
 
     public void parse_SPLProgr() throws ParserErrorException {
