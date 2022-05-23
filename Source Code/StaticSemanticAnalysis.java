@@ -8,82 +8,100 @@ class StaticSemanticAnalysis{
 
     ArrayList<Hashtable<String, SymbolNode>> symbolTableVar = new ArrayList<Hashtable<String, SymbolNode>>();
     ArrayList<Hashtable<String, SymbolNode>> symbolTableFunc = new ArrayList<Hashtable<String, SymbolNode>>();
+    Queue<SymbolNode> que=new LinkedList<>();
 
     public StaticSemanticAnalysis(SymbolNode root) {
         this.root = root;
     }
 
-    /*public void findProc(String procName, SyNode rot, boolean isFound){
-        if(rot==null){
-            return;
-        }
-
-        if(rot.getContents().equals(procName) && !isFound){
-            current = rot.getParent();
-            if(rot.getClassName().equals(rot.getContents())){
-                current = rot;
-                //System.out.println(rot.getChildren().;
+    public SymbolNode findProc(SymbolNode n, String procName)  {
+        que.clear();
+        que.add(n);       /* root node is added to the top of the queue */
+        while (que.size() != 0){
+            n = que.remove();
+            for (SymbolNode kid : n.getChildren()) {
+                if(kid.getValue().equals(procName)){
+                    return kid.getParent();
+                }else{
+                    que.add(kid);
+                }
             }
-            //System.out.println(current.getChildren())i;
-            isFound = true;
-            return;
         }
-
-        for(SyNode kid : rot.getChildren()){
-            //System.out.println(kid);
-            findProc(procName, kid, isFound);
-        }
+        return null;
     }
 
-    public SyNode getProc(String procName){
-        findProc(procName, root);
+    public SymbolNode findVar(SymbolNode n, String procName)  {
+        que.clear();
+        que.add(n);       /* root node is added to the top of the queue */
+        while (que.size() != 0){
+            n = que.remove();
+            for (SymbolNode kid : n.getChildren()) {
+                if(kid.getType().equals(procName)){
+                    return kid;
+                }else{
+                    que.add(kid);
+                }
+            }
+        }
+        return null;
+    }
+
+    public SymbolNode getProc(String procName){
+        findProc(root, procName);
         return current;
     }
 
     public void performScopeResolution(){
-        findProc("main", root, false);
-        SyNode man = current;
-        makeScopeSymbolTable(man, 0);
-    }
+        SymbolNode man = findProc(root, "main");
+        makeScopeVarSymbolTable(man, 0);
 
-    public void makeScopeSymbolTable(SyNode beginProc, int scID){
-        boolean isFound = false;
-        findProc("VarDecl", beginProc, isFound);
-        SyNode beginVar = current;
-        makeVaraibleTable(beginVar, scID);
-    }
-
-    public void makeVaraibleTable(SyNode beg, int scID){
-        ArrayList<SyNode> kids = beg.getChildren();
-
-        for(SyNode kid : kids){
-            System.out.println(kid.getContents());
+        SymbolNode tt = findVar(root, "Algorithm");
+        for(SymbolNode k : tt.getChildren()){
+            //System.out.println(k.getChildren().get(0).getValue()+" "+k.getType());
         }
+        makeFunctionEntry(tt, 0);
+    }
 
-        if(kids.size()==1){
-            System.out.println("boom");
+    public void makeScopeVarSymbolTable(SymbolNode beginProc, int scID){
+        SymbolNode beginVar = findVar(beginProc, "VarDecl");
+        makeVaraibleEntry(beginVar, scID);
+    }
+
+    public void makeVaraibleEntry(SymbolNode beg, int scID){
+        if(beg.getChildren().isEmpty()){
             return;
-        }
+        }else if (beg.getChildren().size()==2){
+                SymbolNode dec = beg.getChildren().get(0);
+                String type = dec.getChildren().get(0).getChildren().get(0).getValue();
+                String value = dec.getChildren().get(1).getChildren().get(0).getValue();
 
-        SyNode dec = kids.get(0);
-        int i=0;
-        boolean isrr = false;
+                //System.out.println(type + " " +value);
 
-        if(dec.getChildren().get(0).getContents().equals("arr")){
-            i++;
-            isrr=true;
+                for(SymbolNode k : dec.getChildren()){
+                    //System.out.println(k.getChildren().get(0).getValue()+" "+k.getType());
+                }
+
+                //makeVaraibleEntry(beg.getChildren().get(1), scID);
         }else{
 
         }
+    }
 
+    public  void makeFunctionEntry(SymbolNode beg, int scID){
+        if(beg.getType().equals("Branch")
 
-        //String type = dec.getChildren().get(0).get(0).getContents();
-        //String var = dec.getChildren().get(1).get(0).getContents();
+        }
 
-        System.out.println(dec.getChildren().get(0).getContents());
+        if (beg.getType().equals("Loop")){
 
-        //SymbolNodeVar node = new SymbolNodeVar(type, var, scID+"");
+        }
 
-        makeVaraibleTable(kids.get(2), scID);
-    }*/
+        if(beg.getType().equals("PD")){
+
+        }
+
+        if(beg.getValue().equals("pcall")){
+            scopeFC(beg.getChildren().get(1).getValue());
+        }
+    }
 }

@@ -56,21 +56,17 @@ public class Parser{
 
                   SymbolNode kid = new SymbolNode(parent, tkid, level+"", type, content);
 
-                  if(content.equals("main") && parent.getType().equals("SPLProgr")){
-                      kid.setType("Procedure");
-                  }
-
-                  if(!type.equals("Separator") && !type.equals("Nullable") /** && !type.equals("ProcDefs") && !type.equals("PD") && !type.equals("Algorithm") && !content.equals("proc")*/){
+                  if(!type.equals("Separator") && !type.equals("Nullable") && !type.equals("ProcDefs") && !type.equals("PD") && !type.equals("Algorithm")){
                       parent.addChild(kid);
-                  }
+                    }
 
                   //String result = String.format("%" + level * 5 + "s : [%s]%n", node.getNodeName()+" "+e.getAttribute("Content"), level);
                   //System.out.print(result);
-                  //if(!type.equals("ProcDefs") && !type.equals("PD") && !type.equals("Algorithm") && !content.equals("proc")){
+                  if(!type.equals("ProcDefs") && !type.equals("PD") && !type.equals("Algorithm")){
                       printNode(node.getChildNodes(), level, kid);
-                  //}else{
-                  //    printNode(node.getChildNodes(), level, parent);
-                  //}
+                  }else{
+                      printNode(node.getChildNodes(), level, parent);
+                  }
 
 
                   // how depth is it?
@@ -153,8 +149,8 @@ public class Parser{
              // get all elements
              NodeList childNodes = doc.getChildNodes();
              Node r = childNodes.item(0);
-             root=new SymbolNode(null, "0", "-1", r.getNodeName(), "");
-             printNode(r.getChildNodes(), 0, root);
+             root=new SymbolNode(null, "0", "0", r.getNodeName(), "");
+             printNode(r.getChildNodes(), -1, root);
              System.out.println("Depth of XML : " + DEPTH_XML);
          } catch (SAXException | IOException e) {
              e.printStackTrace();

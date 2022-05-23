@@ -1,0 +1,17 @@
+proc a {
+    proc b {
+        return;
+    },
+    return;
+},
+
+proc c {
+    return;
+},
+
+main {
+    halt;
+    num x;
+    bool boolvar;
+    string stringvar;
+}

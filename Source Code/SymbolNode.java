@@ -48,6 +48,10 @@ class SymbolNode{
         return type;
     }
 
+    public void setType(String tp){
+        type = tp;
+    }
+
     public String getValue(){
         return value;
     }

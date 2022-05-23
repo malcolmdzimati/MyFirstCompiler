@@ -83,7 +83,7 @@ public class Main{
                 parser.syntaxAnalysis();
 
                 StaticSemanticAnalysis sa = new StaticSemanticAnalysis(parser.getAST());
-                //sa.performScopeResolution();
+                sa.performScopeResolution();
                 //SyNode test = sa.getCurrent("boolarr").getParent();
                 //System.out.println(test.getContents()+" "+test.getLevel()+" "+test.getClassName());
                 //lexer.printToken();
