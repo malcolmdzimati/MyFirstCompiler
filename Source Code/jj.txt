@@ -1,12 +1,18 @@
 proc a {
     proc b {
         return;
+        num hg;
+        string b;
     },
     return;
+    string kk;
+    bool bb;
 },
 
 proc c {
     return;
+    string hh;
+    num hdh;
 },
 
 main {
@@ -14,4 +20,9 @@ main {
     num x;
     bool boolvar;
     string stringvar;
+
+    arr num [69] numarr;
+    arr bool [true] boolarr;
+    arr bool [false] boolarr;
+    arr string ["SHORT"] stringarr;
 }

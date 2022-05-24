@@ -8,6 +8,7 @@ class SymbolNode{
     ArrayList<SymbolNode> children = new ArrayList<SymbolNode>();
     int currentID;
     String symbolID;
+    SymbolNode mid;
 
     public SymbolNode(SymbolNode par, String symbolId, String scopeId, String type, String value){
         currentID = 0;
@@ -26,6 +27,10 @@ class SymbolNode{
 
     public void setSymbolID(String id){
         symbolID = id;
+    }
+
+    public void setMid(SymbolNode m){
+        mid = m;
     }
 
     public String getSymbolID(){
@@ -54,6 +59,10 @@ class SymbolNode{
 
     public String getValue(){
         return value;
+    }
+
+    public void setValue(String v){
+        value = v;
     }
 
     public ArrayList<SymbolNode> getChildren(){

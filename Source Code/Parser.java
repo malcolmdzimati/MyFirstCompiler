@@ -54,10 +54,11 @@ public class Parser{
 
                   String content = e.getAttribute("Content");
 
-                  SymbolNode kid = new SymbolNode(parent, tkid, level+"", type, content);
+                  SymbolNode kid = new SymbolNode(parent, tkid, "-1", type, content);
 
                   if(content.equals("main") && parent.getType().equals("SPLProgr")){
                       kid.setType("Procedure");
+                      kid.setScopeID("0");
                   }
 
                   if(!type.equals("Separator") && !type.equals("Nullable") /** && !type.equals("ProcDefs") && !type.equals("PD") && !type.equals("Algorithm") && !content.equals("proc")*/){
@@ -164,8 +165,15 @@ public class Parser{
 
     private void printTree(SymbolNode root) {
         int lvl = Integer.parseInt(root.getScopeID());
-        String result=String.format("%" + (lvl+2)*5 + "s: [%s]%n", root.getType()+" "+root.getValue(), lvl);
-        System.out.print(result);
+        if(lvl!=-1){
+            int i=0;
+            while(i<lvl){
+                System.out.printf("    ");
+                i++;
+            }
+            String result=String.format("%" + (lvl+1)*5 + "s: [%s]%n", root.getType()+" "+root.getValue(), lvl);
+            System.out.print(result);
+        }
 
         if (!root.getChildren().isEmpty()) {
             ArrayList<SymbolNode> nList=root.getChildren();
@@ -177,6 +185,10 @@ public class Parser{
 
     public SymbolNode getAST(){
         return root;
+    }
+
+    public void present(){
+        printTree(root);
     }
 
     public void parse_SPLProgr() throws ParserErrorException {
