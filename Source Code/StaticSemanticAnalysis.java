@@ -4,6 +4,8 @@ import java.util.*;
 class StaticSemanticAnalysis{
     SymbolNode root;
     int current=-1;
+    SymbolNode prevFun;
+    String allErrors="";
 
     ArrayList<Hashtable<String, SymbolNode>> symbolTableVar = new ArrayList<Hashtable<String, SymbolNode>>();
     ArrayList<Hashtable<String, SymbolNode>> symbolTableFunc = new ArrayList<Hashtable<String, SymbolNode>>();
@@ -11,6 +13,7 @@ class StaticSemanticAnalysis{
 
     public StaticSemanticAnalysis(SymbolNode root) {
         this.root = root;
+        prevFun = root;
     }
 
     public SymbolNode findProc(SymbolNode n, String procName)  {
@@ -75,7 +78,11 @@ class StaticSemanticAnalysis{
                     var.setType(type);
                     var.setScopeID(current+"");
 
-                    getCurrentScA().put(var.getValue(), dec.getChildren().get(1));
+                    if(!getCurrentScA().containsKey(var.getValue())){
+                        getCurrentScA().put(var.getValue(), dec.getChildren().get(1));
+                    }else{
+                        String error = "[SEMANTIC ERROR]Conflicting Declaration, varaible has already been delcared";
+                    }
 
                     for(SymbolNode k : beg.getChildren()){
                         //System.out.println(k.getChildren().get(0).getValue()+" "+k.getType());
@@ -93,8 +100,12 @@ class StaticSemanticAnalysis{
                     var.setValue(var.getValue()+"["+mid.getType()+"]");
 
                     //System.out.println(var.getType()+" "+var.getValue());
-
-                    getCurrentScA().put(var.getValue(), dec.getChildren().get(1));
+                    if(!getCurrentScA().containsKey(var.getValue())){
+                        getCurrentScA().put(var.getValue(), dec.getChildren().get(1));
+                    }else{
+                        String error = "[SEMANTIC ERROR]Conflicting Declaration, varaible has already been delcared";
+                        System.out.println(error);
+                    }
                 }
 
                 makeVaraibleEntry(beg.getChildren().get(1));
@@ -109,24 +120,41 @@ class StaticSemanticAnalysis{
 
         if (beg.getType().equals("Loop")){
             enterNewScope();
-            //scopeLoop(beg);
+            scopeLoop(beg);
         }
 
         if(beg.getType().equals("ProcDefs")){
-            if(beg.getChildren().isEmpty()){
-                //return;
-            }
-
             enterNewScope();
             scopeFC(beg);
         }
 
         if(beg.getValue().equals("pcall")){
+            SymbolNode called = beg.getChildren().get(1);
+            called.used();
+            if(!getCurrentScF().containsKey(called.getValue()) && !called.getValue().equals(prevFun.getValue())){
+                String error = "[APPL-DECL ERROR] Function '"+called.getValue()+"' is not within Scope";
+            }
             enterNewScope();
             //scopeFC(beg.getChildren().get(1).getValue());
         }
 
-}
+    }
+
+    public void scopeLoop(SymbolNode beg){
+        for(SymbolNode k : beg.getChildren().get(0).getChildren()){
+            System.out.println(k.getValue()+" "+k.getType());
+        }
+    }
+
+    public SymbolNode checkExistanceVar(SymbolNode th){
+        for(int i=0; i<current; i++){
+            if(symbolTableVar.get(current-i).contains(th.getValue())){
+                return symbolTableVar.get(current-i).get(th.getValue());
+            }
+        }
+        String error = "[APPL-DECL ERROR] Variable: '"+th.getValue()+"' was never declared.";
+        return null;
+    }
 
     public void scopeFC(SymbolNode beg){
         if(beg.getChildren().isEmpty())
@@ -137,9 +165,24 @@ class StaticSemanticAnalysis{
         SymbolNode func = beg.getChildren().get(0).getChildren().get(1);
         func.setType("UserDefinedProcedure");
         func.setScopeID((current-1)+"");
-        symbolTableFunc.get(current-1).put(func.getValue(), func);
+
+        if(func.getValue().equals("main")){
+            String error = "[SEMANTIC ERROR]User Defined Procedure can not be named 'main'";
+            //error
+        }
+
+        if(func.getValue().equals(prevFun.getValue())){
+            String error = "[SEMANTIC ERROR]Cannot define a child-procedure with the same name as parent procedure.";
+        }
+
+        if(symbolTableFunc.containsKey(func.getValue())){
+            String error = "[SEMANTIC ERROR]No two children procedures of the same scope can have the same name: '"+func.getValue()+"' already exits";
+        }else{
+            symbolTableFunc.get(current-1).put(func.getValue(), func);
+        }
         //System.out.println(func.getValue()+" "+func.getType()+" "+func.getScopeID());
 
+        prevFun = func;
         makeFunctionEntry(beg.getChildren().get(0).getChildren().get(2));
         revertScope();
 

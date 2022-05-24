@@ -1,14 +1,15 @@
 import java.util.ArrayList;
 
 class SymbolNode{
-    String scopeID;
+    String scopeID;           //Scope
     SymbolNode parent;
-    String type;
-    String value;
+    String type;              //Userdefined Function or type of var or array
+    String value;             //value is like the name of var or func
     ArrayList<SymbolNode> children = new ArrayList<SymbolNode>();
-    int currentID;
-    String symbolID;
-    SymbolNode mid;
+    int currentID;           //also not used yet
+    String symbolID;         //Low-key not used for now, value is the key,
+    SymbolNode mid;          //Attribute for arrs
+    boolean hasBeenUsed=false;
 
     public SymbolNode(SymbolNode par, String symbolId, String scopeId, String type, String value){
         currentID = 0;
@@ -18,6 +19,10 @@ class SymbolNode{
         this.scopeID = scopeId;
         this.type = type;
         this.value = value;
+    }
+
+    public void used(){
+        hasBeenUsed=true;
     }
 
     public void addChild(SymbolNode k){
