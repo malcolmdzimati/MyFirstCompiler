@@ -156,11 +156,11 @@ public class Parser{
              Node r = childNodes.item(0);
              root=new SymbolNode(null, "0", "-1", r.getNodeName(), "");
              printNode(r.getChildNodes(), 0, root);
-             System.out.println("Depth of XML : " + DEPTH_XML);
+             //System.out.println("Depth of XML : " + DEPTH_XML);
          } catch (SAXException | IOException e) {
              e.printStackTrace();
          }
-         printTree(root);
+         //printTree(root);
     }
 
     private void printTree(SymbolNode root) {
